@@ -142,3 +142,9 @@ dmypy.json
 
 # IDEs
 .idea
+
+# Datasets
+dataset
+
+# Results
+weights
