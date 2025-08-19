@@ -1,0 +1,18 @@
+Device: RTX-3090 (24 Gb VRAM) - 0.413 $/h
+
+- Number of epochs: 80
+- Learning rate: 5e-6
+- Number of GPU workers: 4
+- Training batch size: 2
+- Validation batch size: 1
+
+------------
+
+- Time per epoch: 0.0533 s
+- Time per validation step: 0.2833 s
+
+------------
+
+TOTAL TIME: 15.6 h
+TOTAL COST: 6.4428 $/h
+    
