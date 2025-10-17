@@ -17,6 +17,10 @@ from pathlib import Path
 import os
 from PIL import Image
 import time
+from dotenv import load_dotenv
+from huggingface_hub import HfApi
+
+load_dotenv()
 
 
 def prepare_real_document(document_path: Path, tmp_folder: Path = None):
@@ -61,10 +65,25 @@ def compute_score(gt: dict, pr: dict) -> float:
     return round(score * 100, 2)
 
 
-def inference(model_path, data_path, document: Path, output_verbose: bool):
+def load_model_from_hub():
+    model = DonutModel.from_pretrained(os.getenv("HF_REPO_NAME"), use_auth_token=os.getenv("HF_TOKEN"))
+    return model
+
+
+def load_model_local():
+    model_path = "weights/20251016_090333"
+    model = DonutModel.from_pretrained(model_path)
+    return model
+
+
+def load_model(remote: bool):
+    return load_model_from_hub() if remote else load_model_local()
+
+
+def inference(data_path, document: Path, output_verbose: bool):
     task_name='dataset'
 
-    model = DonutModel.from_pretrained(model_path)
+    model = load_model(remote=True)
     # model.half()
     model.eval()
 
@@ -96,15 +115,15 @@ def inference(model_path, data_path, document: Path, output_verbose: bool):
         print(f"\nACCURACY: {score}%")
         print(f"TIME: {round(tf, 2)}s")
 
+        break
+
     # Clear temporary images
     # clean_tmp_folder(tmp_folder)
 
 
 if __name__ == '__main__':
-    model_path = r"weights/20251016_090333"
     data_path = r"C:\Users\FranMoreno\datasets\train_dataset_16Oct\real_data"
-
     document = Path(r"dataset/real_documents/(klaas) Chef - order doc - 2pages.pdf")
 
-    inference(model_path, data_path, document, output_verbose=True)
+    inference(data_path, document, output_verbose=True)
 
