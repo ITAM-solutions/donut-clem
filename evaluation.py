@@ -19,7 +19,7 @@ import openpyxl
 from donut import DonutModel, JSONParseEvaluator
 import pandas as pd
 from PIL import Image
-from typing import List, Optional
+from typing import List
 import json
 import numpy as np
 from datetime import datetime
@@ -105,14 +105,6 @@ class Evaluator:
             )
             results_df = pd.concat([results_df, subset_results], ignore_index=True)
 
-        overall_results = pd.DataFrame([[
-            "OVERALL",
-            results_df["tree_acc"].mean(),
-            results_df["products_hit"].mean(),
-            results_df["matches_count"].mean(),
-        ]], columns=["subset", "tree_acc", "products_hit", "matches_count"])
-
-        results_df = pd.concat([results_df, overall_results], ignore_index=True)
         results_df.to_csv(output_path / 'metrics.csv', index=False)
 
         # Save a list of all the samples that generated a broken output, for later investigation
@@ -262,8 +254,7 @@ class Evaluator:
             return datetime.strptime(date_str, "%Y%m%d")
 
         subsets = os.listdir(self.evaluation_dataset)
-        # results = [as_date(folder_name) for folder_name in os.listdir(all_results_path)]
-        columns = ['Date', 'Tree Accuracy', 'Product Count Accuracy', 'Exact Matches Score']
+        columns = ['Date', 'Tree Accuracy', 'Product Count Accuracy', 'Exact Matches Score', 'Num Samples']
 
         data = {
             as_date(folder_name): pd.read_csv(csv_file) for folder_name in os.listdir(all_results_path)
@@ -285,6 +276,7 @@ class Evaluator:
                         record_df[record_df['subset'] == subset]['tree_acc'].iloc[0],
                         record_df[record_df['subset'] == subset]['products_hit'].iloc[0],
                         record_df[record_df['subset'] == subset]['matches_count'].iloc[0],
+                        record_df[record_df['subset'] == subset]['num_samples'].iloc[0],
                     ])
 
                 combined_df = pd.DataFrame(combined_data, columns=columns)
@@ -304,6 +296,7 @@ class Evaluator:
                         df_csv[df_csv['subset'] == subset]['tree_acc'].iloc[0],
                         df_csv[df_csv['subset'] == subset]['products_hit'].iloc[0],
                         df_csv[df_csv['subset'] == subset]['matches_count'].iloc[0],
+                        df_csv[df_csv['subset'] == subset]['num_samples'].iloc[0],
                     ])
 
                 combined_df = pd.DataFrame(combined_data, columns=columns)
@@ -412,17 +405,12 @@ class Evaluator:
 if __name__ == '__main__':
     EVALUATION_DATASET = Path('dataset/evaluation/samples')
     MODEL_PATH = Path('weights/20251016_090333')
-    EXCEL_PATH = Path(r'C:\Users\FranMoreno\ITAM solutions\Innovations - Development team - Contract analysis automation\data\donut_data_evaluation\results\evaluation_results_powerbi.xlsx')
+    EXCEL_PATH = Path(r'C:\Users\FranMoreno\ITAM solutions\Innovations - Development team - Contract analysis automation\data\donut_data_evaluation\results\evaluation_results_powerbi - Copy.xlsx')
 
     evaluator = Evaluator(EVALUATION_DATASET)
 
     # Run evaluation on a certain model
-    evaluator.run(MODEL_PATH, clean_previous_results=True)
+    # evaluator.run(MODEL_PATH, clean_previous_results=True)
 
     # Merge results and output to excel file.
-    # evaluator.update_excel_report(Path('weights'), EXCEL_PATH)
-
-    # gt = []
-    # pr = None
-    #
-    # print(Evaluator._get_product_comparison(gt, pr))
+    evaluator.update_excel_report(Path('weights'), EXCEL_PATH)
