@@ -12,6 +12,7 @@ generated.
 import os
 import shutil
 from pathlib import Path
+from dataclasses import dataclass, fields
 
 import openpyxl
 
@@ -23,6 +24,15 @@ import json
 import numpy as np
 from datetime import datetime
 
+import evaluation.prediction_cleaning as pr_cleaning
+
+
+@dataclass
+class Metrics:
+    tree_acc: float
+    product_hit: float
+    matches: float
+
 
 class Evaluator:
     def __init__(self, evaluation_dataset: Path):
@@ -32,6 +42,8 @@ class Evaluator:
 
         self.json_parse_evaluator = JSONParseEvaluator()
 
+        self.samples_with_broken_outputs: List[Path] = []  # To keep track of samples that produce a broken inference output.
+        self.low_accuracy_samples: List[Path] = []  # To keep track of samples that had a low prediction accuracy for later investigation
 
     def run(self, model_path: Path, clean_previous_results: bool = False):
         """
@@ -41,6 +53,13 @@ class Evaluator:
         :param clean_previous_results: if `True`, cleans previously computed evaluation results, if existing.
         :return: None (generates some files in the `model_path` folder).
         """
+        if clean_previous_results:
+            ans = input(f"'clean_previous_results' is set to True, so previous logs will be permanently removed. Continue? (Y/n): ")
+            if ans.lower() != 'y':
+                print("Ending program.")
+            else:
+                print('Starting model evaluation...')
+
         model = self._load_donut(model_path)
         output_path = model_path / 'evaluation'
         logs_path = output_path / 'logs'
@@ -53,34 +72,32 @@ class Evaluator:
 
         # Loop through subsets in evaluation data
         for subset_dir in self.evaluation_subsets:
-
+            print(f'RUNNING ON SUBSET: {subset_dir.name}')
             sample_ims, sample_gts = self._load_samples(subset_dir)
 
             tree_accs, products_hits, matches_counts = [], [], []
 
             # Loop through each sample to compute their individual metrics
             for sample_im_path, sample_gt_path in zip(sample_ims, sample_gts):
+                print(f'Sample: {subset_dir.name}/{sample_im_path.stem}')
 
-                sample_im = Image.open(sample_im_path)
                 with open(sample_gt_path, 'r', encoding='utf-8') as fp:
                     sample_gt = json.load(fp)
 
-                pred = self._compute_inference(model, sample_im)
+                sample_gt = self._sanitize_output(sample_gt, sample_im_path)
 
-                tree_acc =  self._compute_tree_acc(sample_gt, pred)
-                products_hit = self._compute_products_hit_acc(sample_gt, pred)
-                matches_count = self._compute_matches_count(pred, sample_gt)
-                metrics = {
-                    "tree_acc": tree_acc,
-                    "products_hit": products_hit,
-                    "matches_count": matches_count
-                }
+                pred = self._compute_inference(model, sample_im_path)
 
-                tree_accs.append(tree_acc)
-                products_hits.append(products_hit)
-                matches_counts.append(matches_count)
+                metrics = self._compute_evaluation_metrics(sample_gt, pred)
+                if self._check_if_low_accuracy(metrics):
+                    self.low_accuracy_samples.append(sample_im_path)
+
+                tree_accs.append(metrics.tree_acc)
+                products_hits.append(metrics.product_hit)
+                matches_counts.append(metrics.matches)
 
                 self._save_evaluation_log(sample_im_path, logs_path, sample_gt, pred, metrics)
+                print("Evaluation log saved.")
 
             subset_results = pd.DataFrame(
                 [[subset_dir.name, np.mean(tree_accs), np.mean(products_hits), np.mean(matches_counts)]],
@@ -98,6 +115,33 @@ class Evaluator:
         results_df = pd.concat([results_df, overall_results], ignore_index=True)
         results_df.to_csv(output_path / 'metrics.csv', index=False)
 
+        # Save a list of all the samples that generated a broken output, for later investigation
+        with open(output_path / 'broken_samples.txt', 'w', encoding='utf-8') as fp:
+            for sample in self.samples_with_broken_outputs:
+                fp.write(f'{sample.parent}/{sample.name}\n')
+
+        # Save samples that produced bad accuracy results for later investigation and improvement
+        low_accuracy_samples_path = output_path / 'low_accuracy_samples'
+        low_accuracy_samples_path.mkdir(parents=True, exist_ok=True)
+        for sample in self.low_accuracy_samples:
+            shutil.copy(sample, low_accuracy_samples_path / sample.name)
+
+    def _compute_evaluation_metrics(self, gt: dict, pr: dict) -> Metrics:
+        return Metrics(
+            tree_acc=self._compute_tree_acc(gt, pr),
+            product_hit=self._compute_products_hit_acc(gt, pr),
+            matches=self._compute_matches_count(gt, pr)
+        )
+
+    @staticmethod
+    def _check_if_low_accuracy(metrics: Metrics) -> bool:
+        return \
+            metrics.tree_acc <= 0.7 or \
+            metrics.product_hit <= 0.5 or \
+            metrics.matches <= 0.3
+
+
+
     def _compute_tree_acc(self, gt: dict, pr: dict) -> float:
         """
         Score based on the JSON structure. Measures how good the model is in reproducing
@@ -109,8 +153,20 @@ class Evaluator:
         :param pr: prediction
         :return: tree accuracy score
         """
+        gt = self._prepare_none_values_for_tree_acc(gt)
+        pr = self._prepare_none_values_for_tree_acc(pr)
         score = self.json_parse_evaluator.cal_acc(pr, gt)
-        return round(score * 100, 4)
+        return score
+
+    @staticmethod
+    def _prepare_none_values_for_tree_acc(data: dict) -> dict:
+        data_prepared = {k: 'None' if v is None else v for k, v in data.items()}
+        data_prepared['products'] = {
+            k: ['None' if v is None else v for v in values]
+            for k, values in data_prepared.get('products', {}).items()
+        }
+        return data_prepared
+
 
     @staticmethod
     def _compute_products_hit_acc(gt: dict, pr: dict) -> float:
@@ -138,7 +194,7 @@ class Evaluator:
         max_length = max(1, num_products_gt)
 
         score = 1 - length_diff / max_length
-        return round(score * 100, 4)
+        return score
 
     @staticmethod
     def _compute_matches_count(gt: dict, pr: dict) -> float:
@@ -165,29 +221,39 @@ class Evaluator:
 
             total_values_count += 1
 
-        gt_products = gt.get('products', [])
-        pr_products = pr.get('products', [])
-        # Product fields
-        for idx, product in enumerate(gt_products):
-            if len(pr_products) < idx + 1:
-                total_values_count += len(list(product.keys()))
-                continue
+        gt_products = gt.get('products', {})
+        pr_products = pr.get('products', {})
 
-            for product_key in product:
-                if product[product_key] == pr_products[idx][product_key]:
-                    total_matches_count += 1
-                total_values_count += 1
+        # Product fields
+        for field in gt_products:
+            if field not in pr_products:
+                total_values_count += len(gt_products[field])
+            else:
+                for value in gt_products[field]:
+                    if value in pr_products[field]:
+                        total_matches_count += 1
+                    total_values_count += 1
 
         matches_ratio = total_matches_count / total_values_count
-        return round(matches_ratio * 100, 4)
+        return matches_ratio
+
+    def _sanitize_output(self, data: dict, im_path: Path) -> dict:
+        try:
+            data = pr_cleaning.normalize_products_structure2(data)
+            data = pr_cleaning.remove_unused_fields(data)
+            data = pr_cleaning.normalize_empty_values(data)
+            return data
+        except AttributeError:
+            print(f'Warning: sample {im_path} produced a broken output. Interpreting as empty response.')
+            self.samples_with_broken_outputs.append(im_path)
+            return pr_cleaning.get_empty_response()
+        except Exception:
+            print(f'Warning: sample {im_path} produced an unexpected error. Interpreting as empty response.')
+            self.samples_with_broken_outputs.append(im_path)
+            return pr_cleaning.get_empty_response()
 
     def update_excel_report(self, all_results_path: Path, excel_path: Path):
         """
-        # 1. Check if the given `excel_path` already exists. If so, we just need to update with the new data.
-        # 2. For that, read the content of the excel (one sheet is enough), to get all the dates that are already recorded.
-        # 3. Read the list of weight folders, and discard those that are included.
-        # 4. Open the excel in append mode, and add those new elements.
-        # 5. If it did not exist, save all the data in there.
 
         :return:
         """
@@ -282,129 +348,63 @@ class Evaluator:
 
         return images, json_files
 
-    def _compute_inference(self, model, im):
+    def _compute_inference(self, model, im_path: Path):
+        im = Image.open(im_path)
         task_name = "dataset"
         output = model.inference(image=im, prompt=f"<s_{task_name}>")["predictions"][0]
-        output = self._sanitize_output(output)
+        output = self._sanitize_output(output, im_path)
         return output
 
-    @staticmethod
-    def _sanitize_output(output: dict) -> dict:
-        # Convert products to list in case it is a dictionary, to be aligned with ground-truth
-        products = output.get('products')
-        if products and type(products) == dict:
-
-            # Find maximum number of products found in output
-            max_num_products = 1
-            for value in products.values():
-                if type(value) == list and len(value) > max_num_products:
-                    max_num_products = len(value)
-
-            # Extend missing values to keep output normalized
-            product_list = [dict() for _ in range(max_num_products)]
-            for key, org_value in products.items():
-                if type(org_value) == str:
-                    values = [org_value] + [None] * (max_num_products - 1)
-                else:
-                    values = org_value + [None] * (max_num_products - len(org_value))
-
-                # Update the output with the new values
-                for idx, value in enumerate(values):
-                    product_list[idx][key] = value
-
-            output['products'] = product_list
-
-        # Remove unused fields
-        unused_shared_keys = ['ltype', 'ctype', 'atype', 'pub']
-        unused_product_keys = ['issub']
-
-        for k in unused_shared_keys:
-            if k in output:
-                del output[k]
-
-        products = output.get('products', [])
-        for k in unused_product_keys:
-            for product in products:
-                if k in product:
-                    del product[k]
-
-        # Rename fields that were named differently
-        for product in products:
-            if 'dfrom' in product:
-                product['drom'] = product['dfrom']
-                del product['dfrom']
-
-        # Normalize empty values: 'None' to None
-        for k, v in output.items():
-            if v == 'None':
-                output[k] = None
-
-        pr_products = output.get('products')
-        if pr_products:
-            output['products'] = [
-                {key: None if value == 'None' else value for key, value in product.items()}
-                for product in pr_products
-            ]
-
-        return output
-
-    def _save_evaluation_log(self, im_path: Path, output_path: Path, gt, pred, metrics: dict):
-        if not output_path.exists():
-            os.makedirs(output_path)
+    def _save_evaluation_log(self, im_path: Path, output_path: Path, gt, pred, metrics: Metrics):
+        output_path.mkdir(parents=True, exist_ok=True)
 
         sample_name = im_path.stem
 
-        metrics_str = '\n'.join([f'{k}:\t{v}' for k, v in metrics.items()])
+        metrics_pairs = [(metric.name, getattr(metrics, metric.name)) for metric in fields(metrics)]
+        metrics_str = '\n'.join([f'{k}:\t{v}' for k, v in metrics_pairs])
         comparison_str = self._parse_json_comparison(gt, pred)
 
         log_str = f"METRICS:\n{metrics_str}\n\n===========\n\nCOMPARISONS (Expected | Actual):\n\n{comparison_str}"
 
-        with open(output_path / f"{sample_name}.txt", 'w') as fp:
+        with open(output_path / f"{sample_name}.txt", 'w', encoding='utf-8') as fp:
             fp.writelines(log_str)
 
     def _parse_json_comparison(self, gt: dict, pred: dict):
 
         text_slices = []
         for k_gt, val_gt in gt.items():
-            if type(val_gt) == str or val_gt is None:
-                val_pr = pred.get(k_gt, "null")
-                field_string = f'{k_gt:<8}:\t{val_gt} |\t{val_pr}'
-                text_slices.append(field_string)
-
-        text_slices.append('---------------------')
+            if not isinstance(val_gt, dict):
+                val_pr = pred.get(k_gt)
+                text_slice = f"\n{k_gt}:\n\tExpected: {val_gt}\n\tActual:   {val_pr}"
+                text_slices.append(text_slice)
 
         # Then, products
-        products_gt = gt.get('products')
-        products_pr = pred.get('products')
+        products_gt = gt.get('products', {})
+        products_pr = pred.get('products', {})
         products_gt, products_pr = self._get_product_comparison(products_gt, products_pr)
 
-        for idx, (product_gt, product_pr) in enumerate(zip(products_gt, products_pr)):
-            product_text_slices = list()
-            product_text_slices.append(f"\nproduct_{idx}:")
-            for prod_k_gt, prod_v_gt in product_gt.items():
-                prod_v_pr = product_pr.get(prod_k_gt, "null")
-                pr_field_string = f'{prod_k_gt:<8}:\t{prod_v_gt} |\t{prod_v_pr}'
-                product_text_slices.append(pr_field_string)
-
-            # Join text to text_slices
-            text_slices.extend(product_text_slices)
+        for field in products_gt:
+            text_slice = f"\n{field}:\n\tExpected: {products_gt[field]}\n\tActual:   {products_pr[field]}"
+            text_slices.append(text_slice)
 
         return '\n'.join(text_slices)
 
     @staticmethod
-    def _get_product_comparison(gt: Optional[List], pr: Optional[List]):
-        # 1st step: make sure we operate with lists
-        if gt is None: gt = []
-        if pr is None: pr = []
+    def _get_product_comparison(gt: dict, pr: dict):
+        print('Comparing products:')
+        print(f'gt:\n{gt}')
+        print(f'pr:\n{pr}')
 
-        # 2nd step: make lists equal in length
-        len_diff = len(gt) - len(pr)
-        if len_diff > 0:  # len(gt) > len(pr)
-            placeholder_content = {k: None for k in gt[0]} if len(gt) > 0 else dict()
-            pr.extend([placeholder_content for _ in range(len_diff)])
-        elif len_diff < 0:  # len(pr) > len(gt)
-            placeholder_content = {k: None for k in pr[0]} if len(gt) > 0 else dict()
-            gt.extend([placeholder_content for _ in range(abs(len_diff))])
+        for field in gt:
+            if field not in pr:
+                pr[field] = [None] * len(gt[field])
+            else:
+                len_diff = len(gt[field]) - len(pr[field])
+                if len_diff > 0:  # len(gt) > len(pr)
+                    pr[field].extend([None] * len_diff)
+                elif len_diff < 0:  # len(gt) < len(pr)
+                    gt[field].extend([None] * len_diff)
+                # else: same length, everything fine
 
         return gt, pr
 
@@ -412,15 +412,15 @@ class Evaluator:
 if __name__ == '__main__':
     EVALUATION_DATASET = Path('dataset/evaluation/samples')
     MODEL_PATH = Path('weights/20251016_090333')
-    EXCEL_PATH = Path('dataset/evaluation_excels/results.xlsx')
+    EXCEL_PATH = Path(r'C:\Users\FranMoreno\ITAM solutions\Innovations - Development team - Contract analysis automation\data\donut_data_evaluation\results\evaluation_results_powerbi.xlsx')
 
     evaluator = Evaluator(EVALUATION_DATASET)
 
     # Run evaluation on a certain model
-    # evaluator.run(MODEL_PATH, clean_previous_results=True)
+    evaluator.run(MODEL_PATH, clean_previous_results=True)
 
     # Merge results and output to excel file.
-    evaluator.generate_evolution_report(Path('weights'), EXCEL_PATH)
+    # evaluator.update_excel_report(Path('weights'), EXCEL_PATH)
 
     # gt = []
     # pr = None
