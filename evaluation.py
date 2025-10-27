@@ -33,6 +33,11 @@ class Metrics:
     product_hit: float
     matches: float
 
+    def print_data(self):
+        print("Tree Accuracy:", self.tree_acc)
+        print("Products Hit Count:", self.product_hit)
+        print("Exact Matches Ratio:", self.matches)
+
 
 class Evaluator:
     def __init__(self, evaluation_dataset: Path):
@@ -308,6 +313,34 @@ class Evaluator:
                 for subset, df in output_dfs.items():
                     df.to_excel(writer, sheet_name=subset, index=False)
 
+    def evaluate_single_sample(self, model_path: Path, sample_im_path: Path):
+        """
+        Use for test single samples.
+
+        :param model_path:
+        :param sample_im_path:
+        :return:
+        """
+        model = self._load_donut(model_path)
+
+        # Check if image and JSON exists for given sample
+        sample_gt_path = sample_im_path.with_suffix('.json')
+        if not sample_im_path.exists() or not sample_gt_path.exists():
+            raise FileNotFoundError(f"Could not find '{sample_im_path}' or '{sample_gt_path}'.")
+
+        # Load JSON content
+        with open(sample_gt_path, 'r', encoding='utf-8') as fp:
+            sample_gt = json.load(fp)
+
+        # Normalize GT format
+        sample_gt = self._sanitize_output(sample_gt, sample_im_path)
+
+        pred = self._compute_inference(model, sample_im_path)
+        print(pred)  # To visualize if output makes sense
+
+        metrics = self._compute_evaluation_metrics(sample_gt, pred)
+        metrics.print_data()
+
     @staticmethod
     def _prepare_results_folder(output_path: Path, clean_previous_results: bool):
         if not output_path.exists():
@@ -407,10 +440,15 @@ if __name__ == '__main__':
     MODEL_PATH = Path('weights/20251016_090333')
     EXCEL_PATH = Path(r'C:\Users\FranMoreno\ITAM solutions\Innovations - Development team - Contract analysis automation\data\donut_data_evaluation\results\evaluation_results_powerbi - Copy.xlsx')
 
+    TARGET_SAMPLE = Path(r"dataset/evaluation/samples/Multiple Tables/abigail_04.pdf_001.png")
+
     evaluator = Evaluator(EVALUATION_DATASET)
 
     # Run evaluation on a certain model
     # evaluator.run(MODEL_PATH, clean_previous_results=True)
 
     # Merge results and output to excel file.
-    evaluator.update_excel_report(Path('weights'), EXCEL_PATH)
+    # evaluator.update_excel_report(Path('weights'), EXCEL_PATH)
+
+    # Run evaluation on a simple sample for testing
+    evaluator.evaluate_single_sample(MODEL_PATH, TARGET_SAMPLE)

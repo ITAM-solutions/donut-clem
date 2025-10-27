@@ -530,7 +530,15 @@ class DonutModel(PreTrainedModel):
 
     def token2json(self, tokens, is_inner_value=False):
         """
-        Convert a (generated) token seuqnce into an ordered JSON format
+        Convert a (generated) token sequence into an ordered JSON format.
+        NOTE: Modified in 21 Oct. 2025 by Fran Moreno:
+            When an end token is not found, instead of just removing the start token (which would put the current
+            content as part of the parent node), an end token is added to the end of the tokens string. The main reason
+            why an end token don't exist is because of the output limit being reached, so this way we still keep most
+            part of the content in its expected structure. This way, it is easier to determine if a hallucination
+            happened and act consequently. With the previous implementation, it was not possible to determine those
+            cases.
+            WARNING: Not deeply tested.
         """
         output = dict()
 
@@ -539,40 +547,45 @@ class DonutModel(PreTrainedModel):
             if start_token is None:
                 break
             key = start_token.group(1)
+            expected_end_token = f"</s_{key}>"
             end_token = re.search(fr"</s_{key}>", tokens, re.IGNORECASE)
             start_token = start_token.group()
-            if end_token is None:
-                tokens = tokens.replace(start_token, "")
-            else:
-                end_token = end_token.group()
-                start_token_escaped = re.escape(start_token)
-                end_token_escaped = re.escape(end_token)
-                content = re.search(f"{start_token_escaped}(.*?){end_token_escaped}", tokens, re.IGNORECASE)
-                if content is not None:
-                    content = content.group(1).strip()
-                    if r"<s_" in content and r"</s_" in content:  # non-leaf node
-                        value = self.token2json(content, is_inner_value=True)
-                        if value:
-                            if len(value) == 1:
-                                value = value[0]
-                            output[key] = value
-                    else:  # leaf nodes
-                        output[key] = []
-                        for leaf in content.split(r"<sep/>"):
-                            leaf = leaf.strip()
-                            if (
-                                leaf in self.decoder.tokenizer.get_added_vocab()
-                                and leaf[0] == "<"
-                                and leaf[-2:] == "/>"
-                            ):
-                                leaf = leaf[1:-2]  # for categorical special tokens
-                            output[key].append(leaf)
-                        if len(output[key]) == 1:
-                            output[key] = output[key][0]
 
-                tokens = tokens[tokens.find(end_token) + len(end_token) :].strip()
-                if tokens[:6] == r"<sep/>":  # non-leaf nodes
-                    return [output] + self.token2json(tokens[6:], is_inner_value=True)
+            if end_token is None:
+                # tokens = tokens.replace(start_token, "")
+                tokens += expected_end_token
+                end_token = re.search(fr"</s_{key}>", tokens, re.IGNORECASE)
+
+            # else:
+            end_token = end_token.group()
+            start_token_escaped = re.escape(start_token)
+            end_token_escaped = re.escape(end_token)
+            content = re.search(f"{start_token_escaped}(.*?){end_token_escaped}", tokens, re.IGNORECASE)
+            if content is not None:
+                content = content.group(1).strip()
+                if r"<s_" in content and r"</s_" in content:  # non-leaf node
+                    value = self.token2json(content, is_inner_value=True)
+                    if value:
+                        if len(value) == 1:
+                            value = value[0]
+                        output[key] = value
+                else:  # leaf nodes
+                    output[key] = []
+                    for leaf in content.split(r"<sep/>"):
+                        leaf = leaf.strip()
+                        if (
+                            leaf in self.decoder.tokenizer.get_added_vocab()
+                            and leaf[0] == "<"
+                            and leaf[-2:] == "/>"
+                        ):
+                            leaf = leaf[1:-2]  # for categorical special tokens
+                        output[key].append(leaf)
+                    if len(output[key]) == 1:
+                        output[key] = output[key][0]
+
+            tokens = tokens[tokens.find(end_token) + len(end_token) :].strip()
+            if tokens[:6] == r"<sep/>":  # non-leaf nodes
+                return [output] + self.token2json(tokens[6:], is_inner_value=True)
 
         if len(output):
             return [output] if is_inner_value else output
