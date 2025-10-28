@@ -3,7 +3,7 @@ File name: donut_clem
 Author: Fran Moreno
 Last Updated: 10/27/2025
 Version: 1.0
-Description: TOFILL
+Description: TODO
 """
 from pathlib import Path
 from donut import DonutModel
@@ -16,16 +16,34 @@ from clem.output_schema import PredictionSchema
 
 
 class DonutCLEM:
-    def __init__(self, model_path: Path):
+    """ TODO """
+    def __init__(self, model_path: Path, recursive_prediction: bool = True, max_im_divisions: int = 2):
+        """
+        TODO
+        :param model_path:
+        :param recursive_prediction:
+        :param max_im_divisions:
+        """
         self.model_path: Path = model_path
+        self.recursive_prediction = recursive_prediction
+        self.max_im_divisions = max_im_divisions if self.recursive_prediction else 0
 
         self.model: DonutModel = DonutModel.from_pretrained(model_path)
         self.task_name = "dataset"
         self.prompt = f"<s_{self.task_name}>"
 
-        self.max_im_divisions: int = 2
-
-    def predict(self, im_path: Path, divisions: int = 0, output: list = None):
+    def predict(self,
+            im_path: Path,
+            divisions: int = 0,
+            output: List[PredictionSchema] = None
+    ) -> List[PredictionSchema]:
+        """
+        TODO
+        :param im_path:
+        :param divisions:
+        :param output:
+        :return:
+        """
         if output is None:
             output = []
 
@@ -42,14 +60,25 @@ class DonutCLEM:
             else:  # Max iteration depth reached. Will bypass previous output.
                 return output
 
-    def _inference(self, im_path: Image):
+    def _inference(self, im_path: Image) -> PredictionSchema:
+        """
+        TODO
+        :param im_path:
+        :return:
+        """
         im = Image.open(im_path)
-        output = self.model.inference(image=im, prompt=self.prompt)["predictions"][0]
-        PredictionSchema.model_validate_json(json.dumps(output))
+        output_raw = self.model.inference(image=im, prompt=self.prompt)["predictions"][0]
+        output = PredictionSchema.model_validate_json(json.dumps(output_raw))
         return output
 
     @staticmethod
     def _split_image_in_half(im_path: Path, tmp_dir: str) -> List[Path]:
+        """
+        TODO
+        :param im_path:
+        :param tmp_dir:
+        :return:
+        """
         im = Image.open(im_path)
         height_half = im.height // 2
 
@@ -69,7 +98,7 @@ class DonutCLEM:
 
 if __name__ == '__main__':
     MODEL_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\weights\20251016_090333")
-    donut = DonutCLEM(MODEL_PATH)
+    donut = DonutCLEM(MODEL_PATH, recursive_prediction=False)
 
     # Test with sample that generates good output schema:
     # IM_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Blank\abigail_05.pdf_003.png")
@@ -79,3 +108,4 @@ if __name__ == '__main__':
     # Test with sample that produces hallucination
     IM_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Multiple Tables\abigail_04.pdf_001.png")
     output = donut.predict(IM_PATH)
+    print(output)
