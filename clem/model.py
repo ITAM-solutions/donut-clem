@@ -7,15 +7,14 @@ Description: this file implements DonutCLEM, which is an interface built over Do
 normalize its outputs. Use this class to abstract its inner behaviour and focus on its integration within a
 Document data extraction tool.
 """
-import json
-
 from donut import DonutModel
 from pathlib import Path
 from pydantic import ValidationError
 from PIL import Image
 from tempfile import TemporaryDirectory
 from typing import List, Tuple
-from clem.output_schema import PredictionSchema, get_empty_prediction
+from clem.prediction_schema import PredictionSchema, get_empty_prediction
+from clem.combination_logic import CandidateCollector
 from enum import Enum
 
 
@@ -46,8 +45,8 @@ class DonutCLEM:
     def predict(self,
             im_path: Path,
             divisions: int = 0,
-            output: List[PredictionSchema] = None
-    ) -> List[PredictionSchema]:
+            output: CandidateCollector = None
+    ) -> CandidateCollector:
         """
         This recursive method executes the model inference. In case that the model's prediction doesn't fit the
         expected data schema, it will keep trying to produce inference by dividing the input image in multiple
@@ -58,12 +57,17 @@ class DonutCLEM:
         :param output: list of previous outputs from image divisions (if existing).
         :return: list of outputs from inference.
         """
+        def _combine_outputs(outputs: CandidateCollector, recursion_depth: int) -> CandidateCollector:
+            """ If located at recursion depth 0 (divisions == 0), combines the collected outputs. """
+            if recursion_depth == 0:
+                return outputs.merge()
+
         if output is None:
-            output = []
+            output = CandidateCollector()  # Initially empty
 
         try:
-            output.append(self._inference(im_path))
-            return output
+            output.add(self._inference(im_path))
+            return _combine_outputs(output, divisions)
         except ValidationError:  # Pydantic raises ValidationError is schema validation failed.
             if divisions < self.max_im_divisions:
                 # Save sub-images to temporary directory.
@@ -71,10 +75,10 @@ class DonutCLEM:
                     sub_ims = self._split_image_in_half(im_path, tmp_dir)
                     for sub_im in sub_ims:
                         self.predict(sub_im, divisions = divisions+1, output=output)
-                    return output
+                    return _combine_outputs(output, divisions)
             else:  # Max iteration depth reached. Could not extract data. Returning empty prediction with error status.
-                output.append(get_empty_prediction(raised_error=True))
-                return output
+                output.add(get_empty_prediction(raised_error=True))
+                return _combine_outputs(output, divisions)
 
     def _inference(self, im_path: Image) -> PredictionSchema:
         """
@@ -87,7 +91,7 @@ class DonutCLEM:
         """
         im = Image.open(im_path)
         output_raw = self.model.inference(image=im, prompt=self.prompt)["predictions"][0]
-        output = PredictionSchema.model_validate_json(json.dumps(output_raw))
+        output = PredictionSchema(**output_raw)
         return output
 
     @staticmethod
