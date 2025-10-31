@@ -5,6 +5,8 @@ Last Updated: 10/31/2025
 Version: 1.0
 Description: TOFILL
 """
+import dataclasses
+
 from dataclasses import dataclass, field
 from typing import Optional, List
 
@@ -56,6 +58,14 @@ class CandidateCollector:
                 field_name: vals[idx] for field_name, vals in prediction.products.model_dump().items()
             }) for idx in range(prediction.products.num_products)
         ])
+
+    @property
+    def invoice_fields(self):
+        as_dict = dict()
+        for f in dataclasses.fields(self):  # noqa
+            if f.name != 'products':
+                as_dict[f.name] = getattr(self, f.name)
+        return as_dict
 
 
 # if __name__ == '__main__':

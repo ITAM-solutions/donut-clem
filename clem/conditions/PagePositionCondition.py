@@ -7,7 +7,6 @@ Description: TOFILL
 """
 from clem.conditions.BaseCondition import Condition
 from clem.candidates.collector import CandidateCollector
-from dataclasses import asdict
 
 class PagePositionCondition(Condition):
 
@@ -18,8 +17,6 @@ class PagePositionCondition(Condition):
                 id_candidate.score += 1
             if id_candidate.metadata.get('section') in (0, 4):
                 id_candidate.score += 1
-
-
 
 
 if __name__ == '__main__':
