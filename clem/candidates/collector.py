@@ -1,15 +1,35 @@
 """
 File name: collector
 Author: Fran Moreno
-Last Updated: 10/29/2025
+Last Updated: 10/31/2025
 Version: 1.0
 Description: TOFILL
 """
 from dataclasses import dataclass, field
-from typing import List
+from typing import Optional, List
 
-from prediction_schema import PredictionSchema
-from candidates import FieldCandidate, ProductCandidate
+from clem.prediction_schema import PredictionMetadata, PredictionSchema
+
+
+@dataclass
+class FieldCandidate:
+    value: Optional
+    metadata: dict = field(default_factory=lambda: dict())
+    score: int = 0
+    score_norm: float = 0.0
+
+
+@dataclass
+class ProductCandidate:
+    name: FieldCandidate
+    sku: FieldCandidate
+    qty: FieldCandidate
+    met: FieldCandidate
+    metgr: FieldCandidate
+    dfrom: FieldCandidate
+    dto: FieldCandidate
+    unpr: FieldCandidate
+    totpr: FieldCandidate
 
 
 @dataclass
@@ -24,7 +44,7 @@ class CandidateCollector:
     corp: List[FieldCandidate] = field(default_factory=lambda: [])
     products: List[ProductCandidate] = field(default_factory=lambda: [])
 
-    def add(self, prediction: PredictionSchema):
+    def add(self, prediction: PredictionSchema, metadata: dict):
         self.id_.append(FieldCandidate(prediction.id_, prediction.metadata))
         self.date_.append(FieldCandidate(prediction.date_, prediction.metadata))
         self.po.append(FieldCandidate(prediction.po, prediction.metadata))
@@ -37,39 +57,25 @@ class CandidateCollector:
             }) for idx in range(prediction.products.num_products)
         ])
 
-    def merge(self) -> "CandidateCollector":
-        return ScoreSystem.compute_scores(self)
 
-
-class ScoreSystem:
-    """ Collects all scoring conditions and defines a method to execute them sequentially. """
-
-    @classmethod
-    def compute_scores(cls, candidates: CandidateCollector) -> CandidateCollector:
-        conditions = [
-            cls.condition_1,
-            cls.condition_2,
-            cls.condition_3,
-            cls.condition_4,
-            # Keep expanding if needed
-        ]
-
-        for condition in conditions:
-            candidates = condition(candidates)
-        return candidates
-
-    @staticmethod
-    def condition_1(candidates: CandidateCollector) -> CandidateCollector:
-        return candidates
-
-    @staticmethod
-    def condition_2(candidates: CandidateCollector) -> CandidateCollector:
-        return candidates
-
-    @staticmethod
-    def condition_3(candidates: CandidateCollector) -> CandidateCollector:
-        return candidates
-
-    @staticmethod
-    def condition_4(candidates: CandidateCollector) -> CandidateCollector:
-        return candidates
+# if __name__ == '__main__':
+#     from prediction_schema import ProductsSchema
+#
+#     json_str1 = '{"id": "pred1v1", "products": {"name": ["prod1v1", "prod2v1"], "sku": ["prod1v2", "prod2v2"]}}'
+#     json_str2 = '{"id": "pred2v1", "products": {"name": ["prod3v1", "prod4v1", "prod5v1"], "sku": ["prod3v2", "prod4v2", "prod5v2"]}}'
+#
+#     data1 = {
+#         'id': 'pred1v1',
+#         'products': {
+#             'name': ['a', 'b'],
+#             'sku': ['c', 'd'],
+#         }
+#     }
+#     pr1 = PredictionSchema(**data1)
+#     # pr1 = PredictionSchema.model_validate_json(json_str1)
+#     pr2 = PredictionSchema.model_validate_json(json_str2)
+#
+#     candidate_collector = CandidateCollector()
+#     candidate_collector.add(pr1)
+#     candidate_collector.add(pr2)
+#     print(candidate_collector)

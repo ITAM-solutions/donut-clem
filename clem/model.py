@@ -13,9 +13,12 @@ from pydantic import ValidationError
 from PIL import Image
 from tempfile import TemporaryDirectory
 from typing import List, Tuple
-from clem.prediction_schema import PredictionSchema, get_empty_prediction
-from clem.combination_logic import CandidateCollector
 from enum import Enum
+import pymupdf
+
+from clem.prediction_schema import PredictionSchema, get_empty_prediction
+from clem.candidates.collector import CandidateCollector
+from clem.candidates.merger import merge
 
 
 class ModelState(str, Enum):
@@ -42,43 +45,75 @@ class DonutCLEM:
         self.model, self.model_task = self._load_model_from_local(model_path)
         self.prompt = f"<s_{self.model_task}>"
 
+    def predict_document(self, document_path: Path):
+        """
+        1. If PDF:
+            1.1. Split into pages and save them into a temporary directory.
+            1.2. Execute `predict` for each image, combining their solutions into the same CandidateCollector.
+            1.3. Merge everything.
+
+        # TODO NOT FINISHED!!
+        :param document_path:
+        :return:
+        """
+        tmp_dir_obj = TemporaryDirectory()
+        tmp_dir = Path(tmp_dir_obj.name)
+
+        candidates_collector = CandidateCollector()
+
+        # Let's assume by now that the document is always a PDF file.
+        if document_path.suffix.lower() == '.pdf':
+            # Read with PyMuPDF
+            pdf_obj = pymupdf.open(document_path)
+            for idx, page in pdf_obj:
+                pixmap = page.get_pixmap(dpi=200)
+                im_path = tmp_dir / f"{document_path.stem}_p{idx}.png"
+                pixmap.save(im_path)
+
+                self.predict(im_path, output=candidates_collector, page=idx)
+
+            # After prediction collection:
+            final_prediction = merge(candidates_collector)
+        else:
+            # TODO implement for images, maybe even docx.
+            return None
+
+        tmp_dir_obj.cleanup()
+
+
     def predict(self,
             im_path: Path,
+            output: CandidateCollector,
             divisions: int = 0,
-            output: CandidateCollector = None
-    ) -> CandidateCollector:
+            **metadata
+    ) -> None:
         """
         This recursive method executes the model inference. In case that the model's prediction doesn't fit the
         expected data schema, it will keep trying to produce inference by dividing the input image in multiple
-        sub-images, and concatenating their outputs.
+        sub-images, and concatenating their outputs in the same CandidateCollector object.
 
         :param im_path: Path to the image that will be used as the model's input to compute inference.
         :param divisions: number of current image divisions performed.
-        :param output: list of previous outputs from image divisions (if existing).
-        :return: list of outputs from inference.
+        :param output: CandidateCollector object that keeps track of all the previous predictions.
+        :return: None (Modifies the output argument in place).
         """
-        def _combine_outputs(outputs: CandidateCollector, recursion_depth: int) -> CandidateCollector:
-            """ If located at recursion depth 0 (divisions == 0), combines the collected outputs. """
-            if recursion_depth == 0:
-                return outputs.merge()
-
-        if output is None:
-            output = CandidateCollector()  # Initially empty
-
         try:
-            output.add(self._inference(im_path))
-            return _combine_outputs(output, divisions)
+            if 'sections' in metadata:
+                metadata['section'] = self._compute_sections(metadata['sections'])
+                # del metadata['sections']
+            output.add(self._inference(im_path), metadata)
         except ValidationError:  # Pydantic raises ValidationError is schema validation failed.
             if divisions < self.max_im_divisions:
                 # Save sub-images to temporary directory.
-                with TemporaryDirectory() as tmp_dir:
-                    sub_ims = self._split_image_in_half(im_path, tmp_dir)
-                    for sub_im in sub_ims:
-                        self.predict(sub_im, divisions = divisions+1, output=output)
-                    return _combine_outputs(output, divisions)
+                sub_ims = self._split_image_in_half(im_path)
+                for idx, sub_im in enumerate(sub_ims):
+                    sections = metadata.get('sections', [])
+                    sections.append(idx)
+                    metadata['sections'] = sections
+
+                    self.predict(sub_im, output=output, divisions = divisions+1, **metadata)
             else:  # Max iteration depth reached. Could not extract data. Returning empty prediction with error status.
-                output.add(get_empty_prediction(raised_error=True))
-                return _combine_outputs(output, divisions)
+                output.add(get_empty_prediction(raised_error=True), metadata)
 
     def _inference(self, im_path: Image) -> PredictionSchema:
         """
@@ -95,14 +130,13 @@ class DonutCLEM:
         return output
 
     @staticmethod
-    def _split_image_in_half(im_path: Path, tmp_dir: str) -> List[Path]:
+    def _split_image_in_half(im_path: Path) -> List[Path]:
         """
-        Utility method that divides an image in half, and saves both halves at the given directory.
+        Utility method that divides an image in half, and saves both halves at the same directory as the original image.
         Please note that the destination directory is expected to be temporary, and will be removed at some point
         during execution.
 
         :param im_path: Path to source image.
-        :param tmp_dir: Folder where image halves will be (temporarily) saved.
         :return: List containing the path to each resulting sub-image.
         """
         im = Image.open(im_path)
@@ -115,9 +149,9 @@ class DonutCLEM:
 
         ims_paths = []
         for idx, sub_im in enumerate(ims):
-            tmp_im_path = Path(tmp_dir) / f"{im_path.stem}_{idx}.png"
-            sub_im.save(tmp_im_path)
-            ims_paths.append(tmp_im_path)
+            sub_im_path = im_path.parent / f"{im_path.stem}_s{idx}.png"
+            sub_im.save(sub_im_path)
+            ims_paths.append(sub_im_path)
 
         return ims_paths
 
@@ -142,17 +176,28 @@ class DonutCLEM:
 
         return model, task
 
+    @staticmethod
+    def _compute_sections(sections: list) -> int:
+        """
+
+        :param sections:
+        :return:
+        """
+        return sum([i * (2 ** idx) for idx, i in enumerate(sections[::-1])])
+
 
 if __name__ == '__main__':
-    MODEL_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\weights\20251016_090333")
-    donut = DonutCLEM(MODEL_PATH, mode=ModelState.EVALUATION)
-
-    # Test with sample that generates good output schema:
-    # IM_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Blank\abigail_05.pdf_003.png")
+    # MODEL_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\weights\20251016_090333")
+    # donut = DonutCLEM(MODEL_PATH, mode=ModelState.EVALUATION)
+    #
+    # # Test with sample that generates good output schema:
+    # # IM_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Blank\abigail_05.pdf_003.png")
+    # # output = donut.predict(IM_PATH)
+    # # print(output)
+    #
+    # # Test with sample that produces hallucination
+    # IM_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Multiple Tables\abigail_04.pdf_001.png")
     # output = donut.predict(IM_PATH)
     # print(output)
 
-    # Test with sample that produces hallucination
-    IM_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Multiple Tables\abigail_04.pdf_001.png")
-    output = donut.predict(IM_PATH)
-    print(output)
+    print(DonutCLEM._compute_sections([0, 0]))
