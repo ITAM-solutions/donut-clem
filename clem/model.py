@@ -18,7 +18,7 @@ import pymupdf
 
 from clem.prediction_schema import PredictionSchema, get_empty_prediction
 from clem.candidates.collector import CandidateCollector
-from clem.candidates.merger import merge
+from clem.candidates.merger import CandidateSelector
 
 
 class ModelState(str, Enum):
@@ -59,21 +59,22 @@ class DonutCLEM:
         tmp_dir_obj = TemporaryDirectory()
         tmp_dir = Path(tmp_dir_obj.name)
 
-        candidates_collector = CandidateCollector()
+        candidates_collector = CandidateCollector()  # Will collect value candidates for each field.
 
         # Let's assume by now that the document is always a PDF file.
         if document_path.suffix.lower() == '.pdf':
             # Read with PyMuPDF
             pdf_obj = pymupdf.open(document_path)
-            for idx, page in pdf_obj:
+            for page in pdf_obj:
                 pixmap = page.get_pixmap(dpi=200)
-                im_path = tmp_dir / f"{document_path.stem}_p{idx}.png"
+                im_path = tmp_dir / f"{document_path.stem}_p{page.number}.png"
                 pixmap.save(im_path)
 
-                self.predict(im_path, output=candidates_collector, page=idx)
+                self.predict(im_path, output=candidates_collector, page=page.number)
 
             # After prediction collection:
-            final_prediction = merge(candidates_collector)
+            final_prediction = CandidateSelector.merge(candidates_collector)
+            print(final_prediction)
         else:
             # TODO implement for images, maybe even docx.
             return None
@@ -187,7 +188,7 @@ class DonutCLEM:
 
 
 if __name__ == '__main__':
-    # MODEL_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\weights\20251016_090333")
+    MODEL_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\weights\20251016_090333")
     # donut = DonutCLEM(MODEL_PATH, mode=ModelState.EVALUATION)
     #
     # # Test with sample that generates good output schema:
@@ -200,4 +201,9 @@ if __name__ == '__main__':
     # output = donut.predict(IM_PATH)
     # print(output)
 
-    print(DonutCLEM._compute_sections([0, 0]))
+    # Test with full document
+    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\documents\abigail_01.pdf")
+    donut = DonutCLEM(MODEL_PATH)
+
+    donut.predict_document(DOCUMENT_PATH)
+

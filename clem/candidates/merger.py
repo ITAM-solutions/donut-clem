@@ -5,7 +5,9 @@ Last Updated: 10/31/2025
 Version: 1.0
 Description: TOFILL
 """
-from clem.candidates.collector import CandidateCollector
+from typing import List
+
+from clem.candidates.collector import CandidateCollector, ProductCandidate
 from clem.conditions import conditions
 
 
@@ -15,23 +17,20 @@ class CandidateSelector:
 
     @classmethod
     def merge(cls, candidates: CandidateCollector):
+
+        # Select best invoice field values
         for condition in conditions:
             condition.apply(candidates)
 
-        return cls(candidates)
+        # Reduce products if needed
+        candidates.products = cls._merge_products(candidates.products)
 
-    def get_best_candidates(self):
-        best = dict()
+        return candidates.get_best_candidates()
 
-        # Invoice fields
-        for f_name, options in self._candidates.invoice_fields.items():
-            best[f_name] = max(options, key=lambda x: x.score).value if options else None
-
-        # Products
-        best['products'] = self._candidates.products
-
-        return best
-
+    @staticmethod
+    def _merge_products(products: List[ProductCandidate]) -> List[ProductCandidate]:
+        # TODO implement a product merge mechanism based on metadat info.
+        return products
 
 # if __name__ == '__main__':
 #     from clem.candidates.collector import FieldCandidate

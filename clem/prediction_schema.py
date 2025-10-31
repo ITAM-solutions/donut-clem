@@ -7,40 +7,40 @@ Description: This file defines the expected output schema using a Pydantic model
 for cases where the output schema is not valid.
 """
 from collections import defaultdict
-from enum import Enum
-from dataclasses import dataclass
+# from enum import Enum
+# from dataclasses import dataclass
 from pydantic import BaseModel, Field, model_validator, AliasChoices
 from typing import List, Union, Optional
 
 
-@dataclass
-class DataSource:
-    pass
+# @dataclass
+# class DataSource:
+#     pass
 
 
-@dataclass
-class Page(DataSource):
-    idx: int
-    # TODO Keep adding things here
+# @dataclass
+# class Page(DataSource):
+#     idx: int
+#     # TODO Keep adding things here
 
 
-class SectionName(Enum):
-    HEADER = 0
-    BODY = 0
-    FOOTER = 0
+# class SectionName(Enum):
+#     HEADER = 0
+#     BODY = 0
+#     FOOTER = 0
 
 
-@dataclass
-class Section(DataSource):
-    part: SectionName
-    # TODO Keep adding things here
-
-
-@dataclass
-class PredictionMetadata:
-    raised_error: bool
-    source: DataSource
-    # TODO Keep adding things here
+# @dataclass
+# class Section(DataSource):
+#     part: SectionName
+#     # TODO Keep adding things here
+#
+#
+# @dataclass
+# class PredictionMetadata:
+#     raised_error: bool
+#     source: DataSource
+#     # TODO Keep adding things here
 
 
 
@@ -124,8 +124,8 @@ class PredictionSchema(BaseModel):
     products: Union[ProductsSchema, List[ProductsSchema], str, None]
 
     # metadata: won't be returned with model.fields
-    _raised_error: bool = False
-    _source: DataSource = Page(0)
+    # _raised_error: bool = False
+    # _source: DataSource = Page(0)
     # Keep adding things here
 
     @model_validator(mode='after')
@@ -155,12 +155,13 @@ class PredictionSchema(BaseModel):
         """ Property that tells if the resulting output was produced after an error was raised. """
         return self._raised_error
 
-    @property
-    def metadata(self):
-        return PredictionMetadata(
-            raised_error=self._raised_error,
-            source=self._source
-        )
+    # @property
+    # def metadata(self) -> dict:
+    #     # return PredictionMetadata(
+    #     #     raised_error=self._raised_error,
+    #     #     source=self._source
+    #     # )
+    #     return pass
 
 
 def get_empty_prediction(raised_error: bool = False) -> PredictionSchema:
@@ -184,11 +185,34 @@ def get_empty_prediction(raised_error: bool = False) -> PredictionSchema:
 
 
 if __name__ == '__main__':
-    # # json_str = '{"products": {"drom": ["a", "b"]}}'
-    # json_str = '{"products": [{"name": "foo1", "drom": "None"}, {"name": "foo2", "drom": "b"}]}'
-    # s = PredictionSchema.model_validate_json(json_str)
-    # print(s)
-    json_str = '{"name": ["val1", "val2"], "sku": ["val3"]}'
+    # # # json_str = '{"products": {"drom": ["a", "b"]}}'
+    # # json_str = '{"products": [{"name": "foo1", "drom": "None"}, {"name": "foo2", "drom": "b"}]}'
+    # # s = PredictionSchema.model_validate_json(json_str)
+    # # print(s)
+    # json_str = '{"name": ["val1", "val2"], "sku": ["val3"]}'
+    #
+    # p = ProductsSchema.model_validate_json(json_str)
+    # print(p)
 
-    p = ProductsSchema.model_validate_json(json_str)
-    print(p)
+    data = {
+        'id': 'sample_id',
+        'date': 'sample_date',
+        'po': 'sample_po',
+        'cur': 'sample_cur',
+        'vendor': 'sample_vendor',
+        'corp': 'sample_corp',
+        'products': {
+            'name': ['name1', 'name2'],
+            'sku': ['sku1', 'sku2'],
+            'met': ['met1', 'met2'],
+            'metgr': ['metgr1', 'metgr2'],
+            'qty': ['qty1', 'qty2'],
+            'unpr': ['unpr1', 'unpr2'],
+            'totpr': ['totpr1', 'totpr2'],
+            'dfrom': ['dfrom1', 'dfrom2'],
+            'dto': ['dto1', 'dto2']
+        }
+    }
+
+    s = PredictionSchema(**data)
+    a = 1
