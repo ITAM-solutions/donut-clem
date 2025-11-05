@@ -153,6 +153,8 @@ class TestCandidateCollector(unittest.TestCase):
         candidate_collector = collector.CandidateCollector()
         candidate_collector.add(mock_prediction_schema, metadata=metadata)
 
+        from pathlib import Path
+        candidate_collector.log(Path('.'))
         # Checks
         invoice_fields_expected_actual_pairs = (
             (candidate_collector.id_, ('foo1', DataTypes.str)),

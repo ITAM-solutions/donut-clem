@@ -8,7 +8,9 @@ Description: TOFILL
 from abc import ABC, abstractmethod
 from clem.candidates.collector import CandidateCollector
 
+
 class Condition(ABC):
+    """ Base Condition. Abstract class. Do not create instances from this class! """
 
     @classmethod
     @abstractmethod
@@ -21,3 +23,24 @@ class Condition(ABC):
         :return: None (updates candidates object in place).
         """
         pass
+
+    @property
+    @abstractmethod
+    def weight(self) -> float:
+        """ Defines how important this condition is. """
+        pass
+
+
+class WeakCondition(Condition, ABC):
+    """
+    Use this subclass for conditions that are weakly defined, give partial value to the selection or are not
+    accurate enough.
+    """
+    weight: float = 3
+
+
+class StrongCondition(Condition, ABC):
+    """
+    Use this subclass for conditions that define critical details about the values that are found.
+    """
+    weight: float = 5

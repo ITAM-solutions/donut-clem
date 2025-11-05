@@ -7,10 +7,10 @@ Description: TOFILL
 """
 from clem.conditions.PagePositionCondition import PagePositionCondition
 from clem.conditions.DataTypesCondition import DataTypesCondition
-
+from clem.conditions.ValueRepetitionCondition import ValueRepetitionCondition
 
 conditions = [
     PagePositionCondition,
     DataTypesCondition,
-
+    ValueRepetitionCondition
 ]

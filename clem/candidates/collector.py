@@ -6,36 +6,55 @@ Version: 1.0
 Description: TOFILL
 """
 import dataclasses
-
+import uuid
+from pathlib import Path
+import csv
 from dataclasses import dataclass, field
-from typing import Optional, List, Callable, Any
+from typing import Optional, List, Callable, Any, Dict
 from collections import defaultdict
 
 from clem.datatypes import DataTypes
 from clem.prediction_schema import PredictionSchema
+from clem.normalization.cleaning import clean_value
+
 
 @dataclass
 class FieldCandidate:
     value: Optional
     datatype: Callable
     metadata: dict = field(default_factory=lambda: dict())
-    score: int = 0
 
+    score: float = .0
     _value_raw: Any = None
+    _value_clean: Any = None
     _is_none: bool = False
     _failed_conversion: bool = False
+    _passed_conditions: List = field(default_factory=lambda: list())
+
+    _uuid: str = field(default_factory=lambda: str(uuid.uuid4()))
 
     def __post_init__(self):
         self._value_raw = self.value
         self._is_none = self.value is None
 
+        # Convert to its expected datatype
         conversion = DataTypes.as_type(self.value, self.datatype)
         self.value = conversion.value
         self._failed_conversion = conversion.failed
 
+        # Normalize value for later comparison
+        self._value_clean = clean_value(self._value_raw)
+
+    def add_passed_condition(self, condition):
+        self._passed_conditions.append(condition)
+
     @property
     def value_raw(self):
         return self._value_raw
+
+    @property
+    def value_clean(self):
+        return self._value_clean
 
     @property
     def failed_conversion(self):
@@ -44,6 +63,14 @@ class FieldCandidate:
     @property
     def is_none(self):
         return self._is_none
+
+    def __hash__(self):
+        return hash(self._uuid)
+
+    def __eq__(self, other):
+        if not isinstance(other, FieldCandidate):
+            return False
+        return self._uuid == other._uuid
 
 
 @dataclass
@@ -118,8 +145,33 @@ class CandidateCollector:
 
         return best
 
+    def log(self, dir_path: Path):
+        # Invoice fields log
+        if not dir_path.exists():
+            dir_path.mkdir(parents=True, exist_ok=True)
+
+        with open(dir_path / 'invoice_fields.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            header = ['Field', 'Candidate#', 'Value', 'Value (raw)', 'Is None?', 'Failed Conversion?', 'Score']
+            writer.writerow(header)
+
+            for f_name, candidates in self.invoice_fields.items():
+                for idx, candidate in enumerate(candidates):
+                    new_row = [f_name, idx, candidate.value, candidate.value_raw, candidate.is_none, candidate.failed_conversion, candidate.score]
+                    writer.writerow(new_row)
+
+        # Products log
+        with open(dir_path / 'products.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=';')
+            header = ['Field', 'Product#', 'Value']
+            writer.writerow(header)
+
+            for f_name, values in self.products_fields.items():
+                for idx, value in enumerate(values):
+                    writer.writerow([f_name, idx, value])
+
     @property
-    def invoice_fields(self):
+    def invoice_fields(self) -> Dict[str, List[FieldCandidate]]:
         as_dict = dict()
         for f in dataclasses.fields(self):  # noqa
             if f.name != 'products':

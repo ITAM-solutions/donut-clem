@@ -20,6 +20,8 @@ from clem.prediction_schema import PredictionSchema, get_empty_prediction
 from clem.candidates.collector import CandidateCollector
 from clem.candidates.merger import CandidateSelector
 
+LOGS_PATH = Path('logs')
+
 
 class ModelState(str, Enum):
     """ Enumerator that defines the possible working states of DonutCLEM class. """
@@ -72,6 +74,7 @@ class DonutCLEM:
 
                 self.predict(im_path, output=candidates_collector, page=page.number)
 
+            candidates_collector.log(LOGS_PATH / document_path.stem)
             # After prediction collection:
             final_prediction = CandidateSelector.merge(candidates_collector)
             print(final_prediction)
@@ -104,6 +107,7 @@ class DonutCLEM:
                 # del metadata['sections']
             output.add(self._inference(im_path), metadata)
         except ValidationError:  # Pydantic raises ValidationError is schema validation failed.
+            print("WARNING: Schema validation error. Splitting image in 2")
             if divisions < self.max_im_divisions:
                 # Save sub-images to temporary directory.
                 sub_ims = self._split_image_in_half(im_path)
@@ -202,7 +206,7 @@ if __name__ == '__main__':
     # print(output)
 
     # Test with full document
-    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\documents\abigail_01.pdf")
+    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\documents\christine_04.pdf")
     donut = DonutCLEM(MODEL_PATH)
 
     donut.predict_document(DOCUMENT_PATH)
