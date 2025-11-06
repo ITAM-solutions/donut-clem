@@ -5,11 +5,12 @@ Last Updated: 11/4/2025
 Version: 1.0
 Description: TOFILL
 """
-from typing import Dict, List, Optional
+from typing import Dict, List
 from collections import defaultdict
 
 from clem.conditions.BaseCondition import StrongCondition
 from clem.candidates.collector import CandidateCollector, FieldCandidate
+from clem.utils.similarity import is_a_match
 
 
 class ValueRepetitionCondition(StrongCondition):
@@ -33,28 +34,19 @@ class ValueRepetitionCondition(StrongCondition):
         unique_values_map = defaultdict(list)
 
         for candidate in candidates:
-            unique_vals_matches = [unique_value for unique_value in unique_values_map if cls._is_a_match(unique_value, candidate.value_clean)]
+            unique_vals_matches = [
+                unique_value for unique_value in unique_values_map if is_a_match(unique_value, candidate.value_clean)
+            ]
 
             if not unique_vals_matches:
                 unique_values_map[candidate.value_clean].append(candidate)
             else:
                 for unique_value in unique_vals_matches:
-                    unique_values_map[unique_value].append(candidate) # TODO
+                    unique_values_map[unique_value].append(candidate)
 
         # Reduce duplicate matches in the mapping and return the result.
         val = cls._merge_uniques_with_common_candidates(unique_values_map)
         return val
-
-    @classmethod
-    def _is_a_match(cls, value1: str, value2: str) -> bool:
-        # TODO Implement a similarity algorithm
-        for c in value1:
-            if c in value2:
-                return True
-        for c in value2:
-            if c in value1:
-                return True
-        return False
 
     @classmethod
     def _assign_scores_for_repetition(cls, uniques_map: Dict[str, List], actual_candidates: List[FieldCandidate]):
@@ -63,7 +55,7 @@ class ValueRepetitionCondition(StrongCondition):
         for unique_id, candidates in uniques_map.items():
             num_reps = len(candidates)
             for candidate in candidates:
-                weight = cls.weight * (num_reps / total_num_candidates)
+                weight = cls.weight * (num_reps / total_num_candidates)  # noqa
                 actual_candidates[actual_candidates.index(candidate)].score += weight
 
     @classmethod
@@ -106,12 +98,14 @@ if __name__ == '__main__':
     from clem.datatypes import DataTypes
 
     id_candidates = [
-        FieldCandidate(value='123', datatype=DataTypes.str),
-        FieldCandidate(value='123', datatype=DataTypes.str),
-        FieldCandidate(value='23', datatype=DataTypes.str),
-        FieldCandidate(value='45', datatype=DataTypes.str),
-        FieldCandidate(value='56', datatype=DataTypes.str),
-        FieldCandidate(value='78', datatype=DataTypes.str),
+        FieldCandidate(value='foo1', datatype=DataTypes.str),
+        FieldCandidate(value='foo1', datatype=DataTypes.str),
+        FieldCandidate(value='foo2', datatype=DataTypes.str),
+        FieldCandidate(value='foo1', datatype=DataTypes.str),
+        FieldCandidate(value='foo1', datatype=DataTypes.str),
+        FieldCandidate(value='foo2', datatype=DataTypes.str),
+        FieldCandidate(value='foo3', datatype=DataTypes.str),
+        FieldCandidate(value='foo4', datatype=DataTypes.str),
     ]
 
     candidates = CandidateCollector(id_=id_candidates)
