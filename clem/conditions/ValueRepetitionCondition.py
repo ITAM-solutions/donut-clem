@@ -51,21 +51,25 @@ class ValueRepetitionCondition(StrongCondition):
     @classmethod
     def _assign_scores_for_repetition(cls, uniques_map: Dict[str, List], actual_candidates: List[FieldCandidate]):
         total_num_candidates = len(actual_candidates)
+        empty_values_count = len(uniques_map.get('', []))
+        total_non_empty_candidates = total_num_candidates - empty_values_count
 
         unique_candidates = list()
         for unique_id, candidates in uniques_map.items():
             num_reps = len(candidates)
 
             # All refer to the same, so lets reduce the candidates to just one, the one with the best score.
-            best_unique_candidate = max(candidates, key=lambda candidate: candidate.score)
-            weight = cls.weight * (num_reps / total_num_candidates)  # noqa
+            best_unique_candidate: FieldCandidate = max(candidates, key=lambda candidate: candidate.score)
+
+            if best_unique_candidate.is_none:
+                proportion = empty_values_count / total_num_candidates
+            else:
+                proportion = num_reps / total_non_empty_candidates
+
+            weight = cls.weight * proportion  # noqa
             best_unique_candidate.score += weight
             unique_candidates.append(best_unique_candidate)
 
-            # for candidate in candidates:
-            #     weight = cls.weight * (num_reps / total_num_candidates)  # noqa
-            #     actual_candidates[actual_candidates.index(candidate)].score += weight
-            #     actual_candidates[actual_candidates.index(candidate)].is_repeated_as = unique_id
         return unique_candidates
 
     @classmethod
@@ -108,14 +112,15 @@ if __name__ == '__main__':
     from clem.datatypes import DataTypes
 
     id_candidates = [
-        FieldCandidate(value='foo1', datatype=DataTypes.str),
-        FieldCandidate(value='foo1', datatype=DataTypes.str),
-        FieldCandidate(value='foo2', datatype=DataTypes.str),
-        FieldCandidate(value='foo1', datatype=DataTypes.str),
-        FieldCandidate(value='foo1', datatype=DataTypes.str),
-        FieldCandidate(value='foo2', datatype=DataTypes.str),
-        FieldCandidate(value='foo3', datatype=DataTypes.str),
-        FieldCandidate(value='foo4', datatype=DataTypes.str),
+        FieldCandidate(value='val1', datatype=DataTypes.str),
+        FieldCandidate(value='val2', datatype=DataTypes.str),
+        FieldCandidate(value='val1', datatype=DataTypes.str),
+        FieldCandidate(value='val1', datatype=DataTypes.str),
+        FieldCandidate(value=None, datatype=DataTypes.str),
+        FieldCandidate(value=None, datatype=DataTypes.str),
+        FieldCandidate(value=None, datatype=DataTypes.str),
+        FieldCandidate(value=None, datatype=DataTypes.str),
+        FieldCandidate(value=None, datatype=DataTypes.str),
     ]
 
     candidates = CandidateCollector(id_=id_candidates)
