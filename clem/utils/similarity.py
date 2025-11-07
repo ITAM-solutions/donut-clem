@@ -44,7 +44,7 @@ def get_dynamic_threshold(length1: int, length2: int, min_th: float = 0.6, max_t
     threshold = 0.8 - 0.02 * (avg_len ** 0.5)
 
     # Penalize large differences in length
-    threshold -= 0.05 * (len_diff / max(length1, length2))
+    threshold -= 0.05 * (len_diff / max(length1, length2)) if any([length1, length2]) else 0.0
 
     # Clamp to min/max
     threshold = max(min_th, min(max_th, threshold))
@@ -52,9 +52,6 @@ def get_dynamic_threshold(length1: int, length2: int, min_th: float = 0.6, max_t
 
 
 def is_a_match(string1: str, string2: str):
-    from clem.normalization.cleaning import clean_value
-    string1, string2 = clean_value(string1), clean_value(string2)
-
     dynamic_threshold = get_dynamic_threshold(len(string1), len(string2))
     similarity_ratio = normalized_similarity(string1, string2)
 

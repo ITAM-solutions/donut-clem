@@ -15,8 +15,8 @@ def clean_value(value: Optional[str]) -> str:
     :param value:
     :return:
     """
-    if not value:
-        return value
+    if value is None:
+        return ''
 
     clean = value.strip().lower()
     clean = re.sub(r'[^\w\s]', '', clean)

@@ -110,17 +110,24 @@ class TestIsAMatch(unittest.TestCase):
         ('078', 'cdefghijkl', 'cdefghijkm', True),
         ('079', 'mnopqrstuv', 'mnopqrstvz', True),
 
-        # Case differences
-        ('080', 'Python', 'python', True),
-        ('081', 'JAVA', 'java', True),
-        ('082', 'Linux', 'linux', True),
-        ('083', 'Windows', 'windows', True),
-        ('084', 'Apple', 'apple', True),
-        ('085', 'Microsoft', 'microsoft', True),
-        ('086', 'GitHub', 'github', True),
-        ('087', 'Docker', 'docker', True),
-        ('088', 'Kubernetes', 'kubernetes', True),
-        ('089', 'TensorFlow', 'tensorflow', True),
+        # # Case differences
+        # ('080', 'Python', 'python', True),
+        # ('081', 'JAVA', 'java', True),
+        # ('082', 'Linux', 'linux', True),
+        # ('083', 'Windows', 'windows', True),
+        # ('084', 'Apple', 'apple', True),
+        # ('085', 'Microsoft', 'microsoft', True),
+        # ('086', 'GitHub', 'github', True),
+        # ('087', 'Docker', 'docker', True),
+        # ('088', 'Kubernetes', 'kubernetes', True),
+        # ('089', 'TensorFlow', 'tensorflow', True),
+
+        # Empty strings
+        ('080', '', '', True),
+        ('081', '', 'a', False),
+        ('082', 'a', '', False),
+        ('083', '', 'abcde', False),
+        ('084', 'abcde', '', False),
 
         # Strings with numbers
         ('090', 'val1', 'val2', False),

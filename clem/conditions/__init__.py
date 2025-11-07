@@ -12,5 +12,4 @@ from clem.conditions.ValueRepetitionCondition import ValueRepetitionCondition
 conditions = [
     PagePositionCondition,
     DataTypesCondition,
-    ValueRepetitionCondition
 ]

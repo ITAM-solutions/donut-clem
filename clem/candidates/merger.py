@@ -8,7 +8,8 @@ Description: TOFILL
 from typing import List
 
 from clem.candidates.collector import CandidateCollector, ProductCandidate
-from clem.conditions import conditions
+from clem.candidates.product_merging import find_and_combine_partial_products
+from clem.conditions import conditions, ValueRepetitionCondition
 
 
 class CandidateSelector:
@@ -18,31 +19,45 @@ class CandidateSelector:
     @classmethod
     def merge(cls, candidates: CandidateCollector):
 
+        unique_candidates = cls._get_unique_candidates(candidates)
+
         # Select best invoice field values
         for condition in conditions:
-            condition.apply(candidates)
+            condition.apply(unique_candidates)
 
         # Reduce products if needed
-        candidates.products = cls._merge_products(candidates.products)
+        unique_candidates.products = find_and_combine_partial_products(unique_candidates.products)
+        unique_candidates.products = cls._merge_products(unique_candidates.products)
 
-        return candidates.get_best_candidates()
+        return unique_candidates.get_best_candidates()
 
     @staticmethod
     def _merge_products(products: List[ProductCandidate]) -> List[ProductCandidate]:
         # TODO implement a product merge mechanism based on metadat info.
         return products
 
-# if __name__ == '__main__':
-#     from clem.candidates.collector import FieldCandidate
-#
-#     id_candidates = [
-#         FieldCandidate(value='foo1', metadata={'page': 0, 'section': 0}),
-#         FieldCandidate(value='foo2', metadata={'page': 0, 'section': 2}),
-#         FieldCandidate(value='foo3', metadata={'page': 1, 'section': 0}),
-#         FieldCandidate(value='foo4', metadata={'page': 2, 'section': 4}),
-#     ]
-#
-#     candidates = CandidateCollector(id_=id_candidates)
-#
-#     scored_candidates = CandidateSelector.merge(candidates)
-#     print(scored_candidates.get_best_candidates())
+    @staticmethod
+    def _get_unique_candidates(candidates: CandidateCollector):
+        ValueRepetitionCondition.apply(candidates)
+
+
+        return candidates
+
+
+if __name__ == '__main__':
+    from clem.candidates.collector import FieldCandidate
+    from clem.datatypes import DataTypes
+
+    id_candidates = [
+        FieldCandidate(value='foo1', datatype=DataTypes.str),
+        FieldCandidate(value='foo1', datatype=DataTypes.str),
+        FieldCandidate(value='foo1', datatype=DataTypes.str),
+        FieldCandidate(value='foo3', datatype=DataTypes.str),
+        FieldCandidate(value='foo2', datatype=DataTypes.str),
+        FieldCandidate(value='foo5', datatype=DataTypes.str),
+    ]
+
+    candidates = CandidateCollector(id_=id_candidates)
+
+    scored_candidates = CandidateSelector.merge(candidates)
+    print(scored_candidates.get_best_candidates())

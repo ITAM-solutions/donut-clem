@@ -24,10 +24,10 @@ class ValueRepetitionCondition(StrongCondition):
         :return:
         """
 
-        # First iteration: over invoice fields. Each of them have a list of candidates.
         for invoice_field_id, field_candidates in candidates.invoice_fields.items():
             unique_values_map = cls._find_best_unique_values(field_candidates)
-            cls._assign_scores_for_repetition(unique_values_map, field_candidates)
+            field_candidates = cls._assign_scores_for_repetition(unique_values_map, field_candidates)
+            setattr(candidates, invoice_field_id, field_candidates)
 
     @classmethod
     def _find_best_unique_values(cls, candidates: List[FieldCandidate]):
@@ -52,11 +52,21 @@ class ValueRepetitionCondition(StrongCondition):
     def _assign_scores_for_repetition(cls, uniques_map: Dict[str, List], actual_candidates: List[FieldCandidate]):
         total_num_candidates = len(actual_candidates)
 
+        unique_candidates = list()
         for unique_id, candidates in uniques_map.items():
             num_reps = len(candidates)
-            for candidate in candidates:
-                weight = cls.weight * (num_reps / total_num_candidates)  # noqa
-                actual_candidates[actual_candidates.index(candidate)].score += weight
+
+            # All refer to the same, so lets reduce the candidates to just one, the one with the best score.
+            best_unique_candidate = max(candidates, key=lambda candidate: candidate.score)
+            weight = cls.weight * (num_reps / total_num_candidates)  # noqa
+            best_unique_candidate.score += weight
+            unique_candidates.append(best_unique_candidate)
+
+            # for candidate in candidates:
+            #     weight = cls.weight * (num_reps / total_num_candidates)  # noqa
+            #     actual_candidates[actual_candidates.index(candidate)].score += weight
+            #     actual_candidates[actual_candidates.index(candidate)].is_repeated_as = unique_id
+        return unique_candidates
 
     @classmethod
     def _merge_uniques_with_common_candidates(cls, uniques: Dict[str, list]) -> Dict[str, list]:

@@ -10,7 +10,7 @@ import uuid
 from pathlib import Path
 import csv
 from dataclasses import dataclass, field
-from typing import Optional, List, Callable, Any, Dict
+from typing import Optional, List, Callable, Any, Dict, Set
 from collections import defaultdict
 
 from clem.datatypes import DataTypes
@@ -73,17 +73,32 @@ class FieldCandidate:
         return self._uuid == other._uuid
 
 
+def get_empty_field(field_name: str) -> FieldCandidate:
+    datatypes_mapping = {
+        'name': DataTypes.str,
+        'sku': DataTypes.str,
+        'qty': DataTypes.int,
+        'met': DataTypes.str,
+        'metgr': DataTypes.str,
+        'dfrom': DataTypes.date,
+        'dto': DataTypes.date,
+        'unpr': DataTypes.price,
+        'totpr': DataTypes.price,
+    }
+    return FieldCandidate(value=None, datatype=datatypes_mapping.get(field_name, DataTypes.str))
+
+
 @dataclass
 class ProductCandidate:
-    name: FieldCandidate
-    sku: FieldCandidate
-    qty: FieldCandidate
-    met: FieldCandidate
-    metgr: FieldCandidate
-    dfrom: FieldCandidate
-    dto: FieldCandidate
-    unpr: FieldCandidate
-    totpr: FieldCandidate
+    name: FieldCandidate = field(default_factory=lambda: get_empty_field('name'))
+    sku: FieldCandidate = field(default_factory=lambda: get_empty_field('sku'))
+    qty: FieldCandidate = field(default_factory=lambda: get_empty_field('qty'))
+    met: FieldCandidate = field(default_factory=lambda: get_empty_field('met'))
+    metgr: FieldCandidate = field(default_factory=lambda: get_empty_field('metgr'))
+    dfrom: FieldCandidate = field(default_factory=lambda: get_empty_field('dfrom'))
+    dto: FieldCandidate = field(default_factory=lambda: get_empty_field('dto'))
+    unpr: FieldCandidate = field(default_factory=lambda: get_empty_field('unpr'))
+    totpr: FieldCandidate = field(default_factory=lambda: get_empty_field('totpr'))
 
     @property
     def dict(self) -> dict:
@@ -96,6 +111,14 @@ class ProductCandidate:
     @property
     def is_complete(self) -> bool:
         return all(self.dict.values())
+
+    @property
+    def filled_fields(self) -> Dict[str, Any]:
+        return {
+            f.name: field_candidate
+            for f in dataclasses.fields(self) if not (field_candidate := getattr(self, f.name)).is_none
+        }
+
 
 @dataclass
 class CandidateCollector:
@@ -185,3 +208,11 @@ class CandidateCollector:
             for field_name, value in product.dict.items():
                 as_dict[field_name].append(value)
         return dict(as_dict)  # defaultdict to dict
+
+
+if __name__ == '__main__':
+    product = ProductCandidate(
+        name=FieldCandidate('a', DataTypes.str),
+        sku=FieldCandidate('b', DataTypes.str),
+    )
+    print(product.filled_fields)
