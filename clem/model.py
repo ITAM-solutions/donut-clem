@@ -16,6 +16,7 @@ from typing import List, Tuple
 from enum import Enum
 import pymupdf
 import time
+import docx2pdf
 
 from clem.prediction_schema import PredictionSchema, get_empty_prediction
 from clem.candidates.collector import CandidateCollector
@@ -75,20 +76,35 @@ class DonutCLEM:
 
                 self.predict(im_path, output=candidates_collector, page=page.number)
 
-            candidates_collector.log(LOGS_PATH / document_path.stem)
-            # After prediction collection:
-            final_prediction = CandidateSelector.merge(candidates_collector)
-            best_candidates = final_prediction.get_best_candidates()
+        elif self._is_image(document_path):
+            self.predict(document_path, output=candidates_collector, page=0)
 
-            self._log_final_candidates(best_candidates)
+        elif document_path.suffix.lower() == '.docx':  # docx
+            # Convert to PDF, then to images
+            pdf_path = tmp_dir / document_path.with_suffix('.pdf').name
+            docx2pdf.convert(document_path, pdf_path)
+
+            pdf_obj = pymupdf.open(pdf_path)
+            for page in pdf_obj:
+                pixmap = page.get_pixmap(dpi=200)
+                im_path = pdf_path.parent / f"{pdf_path.stem}_p{page.number}.png"
+                pixmap.save(im_path)
+
+                self.predict(im_path, output=candidates_collector, page=page.number)
         else:
-            # TODO implement for images, maybe even docx.
-            return None
+            print("WARNING: unexpected document format. Cannot run the data extraction.")
+
+        # Merge results and compute final output
+        candidates_collector.log(LOGS_PATH / document_path.stem)
+        # After prediction collection:
+        final_prediction = CandidateSelector.merge(candidates_collector)
+        best_candidates = final_prediction.get_best_candidates()
+
+        self._log_final_candidates(best_candidates)
 
         tmp_dir_obj.cleanup()
         tf = time.time() - ts
         print(f"Data Extraction on {str(document_path)} took {(tf / 60):.2f}min.")
-
 
     def predict(self,
             im_path: Path,
@@ -200,6 +216,10 @@ class DonutCLEM:
         import json
         print(json.dumps(candidates, indent=2))
 
+    @staticmethod
+    def _is_image(file_path: Path):
+        suffix = file_path.suffix
+        return suffix.lower() in ['.png', '.jpeg', 'jpg']
 
 if __name__ == '__main__':
     MODEL_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\weights\20251016_090333")
@@ -216,7 +236,7 @@ if __name__ == '__main__':
     # print(output)
 
     # Test with full document
-    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\documents\klaas_04.pdf")
+    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Text\abigail_02.pdf_002.png")
     donut = DonutCLEM(MODEL_PATH)
 
     donut.predict_document(DOCUMENT_PATH)
