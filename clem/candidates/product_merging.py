@@ -44,7 +44,6 @@ def find_and_combine_partial_products(products: List[ProductCandidate]):
 
 def are_partials(product1: ProductCandidate, product2: ProductCandidate) -> bool:
     """
-    TODO define
     :param product1:
     :param product2:
     :return:
@@ -58,7 +57,6 @@ def are_partials(product1: ProductCandidate, product2: ProductCandidate) -> bool
 
 def merge_two_partial_products(partial1: ProductCandidate, partial2: ProductCandidate) -> ProductCandidate:
     """
-    TODO define
     :param partial1:
     :param partial2:
     :return:

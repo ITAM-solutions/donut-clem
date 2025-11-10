@@ -17,14 +17,11 @@ class DataTypesCondition(StrongCondition):
     def apply(cls, candidates: CandidateCollector) -> None:
         for invoice_field, field_candidates in candidates.invoice_fields.items():
             for field_candidate in field_candidates:
-                # TODO refine assigned values after defining more conditions.
                 if not field_candidate.failed_conversion:
-                    if field_candidate.datatype == DataTypes.str:
-                        field_candidate.score += 1
-                    else:
-                        field_candidate.score += 5
+                    if field_candidate.datatype != DataTypes.str:
+                        field_candidate.score += cls.weight
                 else:
-                    field_candidate.score -= 1
+                    field_candidate.score -= cls.weight
 
 
 if __name__ == '__main__':

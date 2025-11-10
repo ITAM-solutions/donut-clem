@@ -54,7 +54,6 @@ class DonutCLEM:
             1.2. Execute `predict` for each image, combining their solutions into the same CandidateCollector.
             1.3. Merge everything.
 
-        # TODO NOT FINISHED!!
         :param document_path:
         :return:
         """

@@ -3,16 +3,16 @@ File name: conversion
 Author: Fran Moreno
 Last Updated: 10/31/2025
 Version: 1.0
-Description: TODO define conversions. Add utility conversion functions to another module in this same subpackage.
+Description:
 """
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from .errors import ConversionError
-from .price import string_to_price
-from .date import string_to_date
-from .currency import string_to_currency
-from .integer import string_to_int
+from clem.datatypes.errors import ConversionError
+from clem.datatypes.price import string_to_price
+from clem.datatypes.date import string_to_date
+from clem.datatypes.currency import string_to_currency
+from clem.datatypes.integer import string_to_int
 
 
 @dataclass
@@ -65,3 +65,7 @@ class DataTypes:
             res, error = data, True
 
         return res, error
+
+
+if __name__ == '__main__':
+    print(DataTypes)

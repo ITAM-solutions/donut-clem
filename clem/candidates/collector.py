@@ -72,6 +72,9 @@ class FieldCandidate:
             return False
         return self._uuid == other._uuid
 
+    def __repr__(self):
+        return f"FieldCandidate(value={self.value}, score={self.score})"
+
 
 def get_empty_field(field_name: str) -> FieldCandidate:
     datatypes_mapping = {
@@ -157,6 +160,11 @@ class CandidateCollector:
         ])
 
     def get_best_candidates(self):
+        """
+        # TODO take care of cases where two or more candidates get the same score
+        :return:
+        """
+
         best = dict()
 
         # Invoice fields
