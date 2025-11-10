@@ -30,6 +30,12 @@ class Condition(ABC):
         """ Defines how important this condition is. """
         pass
 
+    @property
+    @abstractmethod
+    def name(self) -> float:
+        """ Printable name to use for this condition"""
+        pass
+
 
 class WeakCondition(Condition, ABC):
     """

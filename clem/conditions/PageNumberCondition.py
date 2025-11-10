@@ -12,6 +12,7 @@ from clem.datatypes import DataTypes
 
 class PageNumberCondition(WeakCondition):
     """ Assign higher scores to values that are located in places where they are more commonly found. """
+    name = "PageNumber[W]"
 
     @classmethod
     def apply(cls, candidates: CandidateCollector) -> None:
@@ -25,7 +26,7 @@ class PageNumberCondition(WeakCondition):
         for field_name in fields_for_which_page_idx_matters:
             for candidate in getattr(candidates, field_name):
                 if candidate.metadata.get('page') == 0:
-                    candidate.score += cls.weight
+                    candidate.update_score(cls.weight, cls.name)
 
 
 if __name__ == '__main__':

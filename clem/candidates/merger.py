@@ -17,31 +17,17 @@ class CandidateSelector:
         self._candidates = candidates
 
     @classmethod
-    def merge(cls, candidates: CandidateCollector):
+    def merge(cls, candidates: CandidateCollector) -> CandidateCollector:
 
-        unique_candidates = cls._get_unique_candidates(candidates)
-
-        # Select best invoice field values
+        # Apply general conditions
         for condition in conditions:
-            condition.apply(unique_candidates)
+            condition.apply(candidates)
 
         # Reduce products if needed
-        unique_candidates.products = find_and_combine_partial_products(unique_candidates.products)
-        unique_candidates.products = cls._merge_products(unique_candidates.products)
-
-        return unique_candidates.get_best_candidates()
-
-    @staticmethod
-    def _merge_products(products: List[ProductCandidate]) -> List[ProductCandidate]:
-        # TODO implement a product merge mechanism based on metadat info.
-        return products
-
-    @staticmethod
-    def _get_unique_candidates(candidates: CandidateCollector):
-        ValueRepetitionCondition.apply(candidates)
-
+        candidates.products = find_and_combine_partial_products(candidates.products)
 
         return candidates
+
 
 
 if __name__ == '__main__':

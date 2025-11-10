@@ -15,6 +15,7 @@ from clem.utils.similarity import is_a_match
 
 class ValueRepetitionCondition(StrongCondition):
     """ Assign higher scores to values that are repeated multiple times between different candidates. """
+    name = "ValueRepetition[S]"
 
     @classmethod
     def apply(cls, candidates: CandidateCollector) -> None:
@@ -45,8 +46,7 @@ class ValueRepetitionCondition(StrongCondition):
                     unique_values_map[unique_value].append(candidate)
 
         # Reduce duplicate matches in the mapping and return the result.
-        val = cls._merge_uniques_with_common_candidates(unique_values_map)
-        return val
+        return cls._merge_uniques_with_common_candidates(unique_values_map)
 
     @classmethod
     def _assign_scores_for_repetition(cls, uniques_map: Dict[str, List], actual_candidates: List[FieldCandidate]):
@@ -67,7 +67,7 @@ class ValueRepetitionCondition(StrongCondition):
                 proportion = num_reps / total_non_empty_candidates
 
             weight = cls.weight * proportion  # noqa
-            best_unique_candidate.score += weight
+            best_unique_candidate.update_score(weight, cls.name)
             unique_candidates.append(best_unique_candidate)
 
         return unique_candidates

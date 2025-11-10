@@ -12,6 +12,7 @@ from clem.datatypes import DataTypes
 
 class DataTypesCondition(StrongCondition):
     """ Assign higher scores to values that were successfully converted to their expected datatype. """
+    name = "DataTypes[S]"
 
     @classmethod
     def apply(cls, candidates: CandidateCollector) -> None:
@@ -19,13 +20,13 @@ class DataTypesCondition(StrongCondition):
             for field_candidate in field_candidates:
                 if not field_candidate.failed_conversion:
                     if field_candidate.datatype != DataTypes.str:
-                        field_candidate.score += cls.weight
+                        field_candidate.update_score(cls.weight, cls.name)
                 else:
-                    field_candidate.score -= cls.weight
+                    field_candidate.update_score(-cls.weight, cls.name)
 
 
 if __name__ == '__main__':
-    print(type(DataTypesCondition))
+    print(DataTypesCondition.name)
 
 #     from clem.candidates.collector import FieldCandidate
 #

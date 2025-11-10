@@ -25,6 +25,8 @@ class FieldCandidate:
     metadata: dict = field(default_factory=lambda: dict())
 
     score: float = .0
+
+    _score_log: List = field(default_factory=lambda: list())
     _value_raw: Any = None
     _value_clean: Any = None
     _is_none: bool = False
@@ -45,8 +47,9 @@ class FieldCandidate:
         # Normalize value for later comparison
         self._value_clean = clean_value(self._value_raw)
 
-    def add_passed_condition(self, condition):
-        self._passed_conditions.append(condition)
+    def update_score(self, inc, condition_name: str) -> None:
+        self.score += round(inc, 3)
+        self._score_log.append(f"{'+' if inc>=0 else '-'}{condition_name}")
 
     @property
     def value_raw(self):
@@ -73,7 +76,8 @@ class FieldCandidate:
         return self._uuid == other._uuid
 
     def __repr__(self):
-        return f"FieldCandidate(value={self.value}, score={self.score})"
+        score_logs = f", log={', '.join(self._score_log)}" if self._score_log else ''
+        return f"FieldCandidate(value={self.value}, score={self.score}{score_logs})"
 
 
 def get_empty_field(field_name: str) -> FieldCandidate:
@@ -169,7 +173,7 @@ class CandidateCollector:
 
         # Invoice fields
         for f_name, options in self.invoice_fields.items():
-            best[f_name] = max(options, key=lambda x: x.score).value if options else None
+            best[f_name] = max(options, key=lambda x: x.score).value_raw if options else None
 
         # Products
         best['products'] = self.products_fields

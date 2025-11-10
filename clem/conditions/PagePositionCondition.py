@@ -12,22 +12,23 @@ from clem.datatypes import DataTypes
 
 class PagePositionCondition(WeakCondition):
     """ Assign higher scores to values that are located in places where they are more commonly found. """
+    name = "PagePosition[W]"
 
     @classmethod
     def apply(cls, candidates: CandidateCollector) -> None:
         fields_for_which_page_position_matters = {
-            'id_': [1, 2],
-            'corp': [1, 2],
-            'vendor': [1, 2],
-            'po': [1, 2],
-            'date_': [1, 4],
-            'cur': [2, 3, 4]
+            'id_': [0, 1],
+            'corp': [0, 1],
+            'vendor': [0, 1],
+            'po': [0, 1],
+            'date_': [0, 3],
+            'cur': [1, 2, 3]
         }
 
         for field_name, common_sections in fields_for_which_page_position_matters.items():
             for candidate in getattr(candidates, field_name):
                 if candidate.metadata.get('section') in common_sections:
-                    candidate.score += cls.weight
+                    candidate.update_score(cls.weight, cls.name)
 
 
 if __name__ == '__main__':
