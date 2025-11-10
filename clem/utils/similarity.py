@@ -57,8 +57,8 @@ def is_a_match(string1: str, string2: str):
 
     is_match = similarity_ratio > dynamic_threshold
 
-    print(f"['{string1}', '{string2}']: "
-          f"Similarity = {similarity_ratio:.4f}, "
-          f"Threshold = {dynamic_threshold:.4f} -> "
-          f"{'MATCH' if is_match else 'NO MATCH'}")
+    # print(f"['{string1}', '{string2}']: "
+    #       f"Similarity = {similarity_ratio:.4f}, "
+    #       f"Threshold = {dynamic_threshold:.4f} -> "
+    #       f"{'MATCH' if is_match else 'NO MATCH'}")
     return is_match

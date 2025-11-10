@@ -116,6 +116,14 @@ class ProductCandidate:
         return as_dict
 
     @property
+    def dict_raw(self) -> dict:
+        as_dict = dict()
+        for f in dataclasses.fields(self):  # noqa
+            field_candidate: FieldCandidate = getattr(self, f.name)
+            as_dict[f.name] = field_candidate.value_raw
+        return as_dict
+
+    @property
     def is_complete(self) -> bool:
         return all(self.dict.values())
 
@@ -125,6 +133,11 @@ class ProductCandidate:
             f.name: field_candidate
             for f in dataclasses.fields(self) if not (field_candidate := getattr(self, f.name)).is_none
         }
+
+    def __repr__(self):
+        return (f"ProductCandidate(name={self.name.value_raw}, sku={self.sku.value_raw}, qty={self.qty.value_raw}, "
+                f"met={self.met.value_raw}, metgr={self.metgr.value_raw}, dfrom={self.dfrom.value_raw}, "
+                f"dto={self.dto.value_raw}, unpr={self.unpr.value_raw}, totpr={self.totpr.value_raw}")
 
 
 @dataclass
@@ -140,25 +153,25 @@ class CandidateCollector:
     products: List[ProductCandidate] = field(default_factory=lambda: [])
 
     def add(self, prediction: PredictionSchema, metadata: dict):
-        self.id_.append(FieldCandidate(prediction.id_, DataTypes.str, metadata))
-        self.date_.append(FieldCandidate(prediction.date_, DataTypes.date, metadata))
-        self.po.append(FieldCandidate(prediction.po, DataTypes.str, metadata))
-        self.cur.append(FieldCandidate(prediction.cur, DataTypes.currency, metadata))
-        self.vendor.append(FieldCandidate(prediction.vendor, DataTypes.str, metadata))
-        self.corp.append(FieldCandidate(prediction.corp, DataTypes.str, metadata))
+        self.id_.append(FieldCandidate(prediction.id_, DataTypes.str, metadata=metadata))
+        self.date_.append(FieldCandidate(prediction.date_, DataTypes.date, metadata=metadata))
+        self.po.append(FieldCandidate(prediction.po, DataTypes.str, metadata=metadata))
+        self.cur.append(FieldCandidate(prediction.cur, DataTypes.currency, metadata=metadata))
+        self.vendor.append(FieldCandidate(prediction.vendor, DataTypes.str, metadata=metadata))
+        self.corp.append(FieldCandidate(prediction.corp, DataTypes.str, metadata=metadata))
 
         num_products = prediction.products.num_products if prediction.products else 0
         self.products.extend([
             ProductCandidate(
-                name=FieldCandidate(prediction.products.name[idx], DataTypes.str, metadata ),
-                sku=FieldCandidate(prediction.products.sku[idx], DataTypes.str, metadata ),
-                met=FieldCandidate(prediction.products.met[idx], DataTypes.str, metadata ),
-                metgr=FieldCandidate(prediction.products.metgr[idx], DataTypes.str, metadata ),
-                qty=FieldCandidate(prediction.products.qty[idx], DataTypes.int, metadata ),
-                unpr=FieldCandidate(prediction.products.unpr[idx], DataTypes.price, metadata ),
-                totpr=FieldCandidate(prediction.products.totpr[idx], DataTypes.price, metadata ),
-                dfrom=FieldCandidate(prediction.products.dfrom[idx], DataTypes.date, metadata ),
-                dto=FieldCandidate(prediction.products.dto[idx], DataTypes.date, metadata ),
+                name=FieldCandidate(prediction.products.name[idx], DataTypes.str, metadata=metadata),
+                sku=FieldCandidate(prediction.products.sku[idx], DataTypes.str, metadata=metadata),
+                met=FieldCandidate(prediction.products.met[idx], DataTypes.str, metadata=metadata),
+                metgr=FieldCandidate(prediction.products.metgr[idx], DataTypes.str, metadata=metadata),
+                qty=FieldCandidate(prediction.products.qty[idx], DataTypes.int, metadata=metadata),
+                unpr=FieldCandidate(prediction.products.unpr[idx], DataTypes.price, metadata=metadata),
+                totpr=FieldCandidate(prediction.products.totpr[idx], DataTypes.price, metadata=metadata),
+                dfrom=FieldCandidate(prediction.products.dfrom[idx], DataTypes.date, metadata=metadata),
+                dto=FieldCandidate(prediction.products.dto[idx], DataTypes.date, metadata=metadata),
             )
             for idx in range(num_products)
         ])
@@ -180,7 +193,7 @@ class CandidateCollector:
             best[f_name] = [option.value_raw for option in filtered_options]
 
         # Products
-        best['products'] = self.products_fields
+        best['products'] = self.product_fields_raw
 
         return best
 
@@ -218,13 +231,20 @@ class CandidateCollector:
         return as_dict
 
     @property
-    def products_fields(self):
+    def products_fields(self) -> dict:
         as_dict = defaultdict(list)
         for product in self.products:
             for field_name, value in product.dict.items():
                 as_dict[field_name].append(value)
         return dict(as_dict)  # defaultdict to dict
 
+    @property
+    def product_fields_raw(self) -> dict:
+        as_dict = defaultdict(list)
+        for product in self.products:
+            for field_name, value in product.dict_raw.items():
+                as_dict[field_name].append(value)
+        return dict(as_dict)  # defaultdict to dict
 
 if __name__ == '__main__':
     product = ProductCandidate(

@@ -95,6 +95,8 @@ class ProductsSchema(BaseModel):
                 if value == 'None':  # Normalizes empty values:
                     value = None
                 model_data[field_name] = [value]
+            elif isinstance(value, list):
+                model_data[field_name] = [v if v != 'None' else None for v in value]
 
     @staticmethod
     def _make_lists_equal_in_length(model_data: dict) -> None:

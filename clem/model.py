@@ -15,12 +15,13 @@ from tempfile import TemporaryDirectory
 from typing import List, Tuple
 from enum import Enum
 import pymupdf
+import time
 
 from clem.prediction_schema import PredictionSchema, get_empty_prediction
 from clem.candidates.collector import CandidateCollector
 from clem.candidates.merger import CandidateSelector
 
-LOGS_PATH = Path('logs')
+LOGS_PATH = Path('../dataset/logs')
 
 
 class ModelState(str, Enum):
@@ -57,6 +58,7 @@ class DonutCLEM:
         :param document_path:
         :return:
         """
+        ts = time.time()
         tmp_dir_obj = TemporaryDirectory()
         tmp_dir = Path(tmp_dir_obj.name)
 
@@ -76,12 +78,16 @@ class DonutCLEM:
             candidates_collector.log(LOGS_PATH / document_path.stem)
             # After prediction collection:
             final_prediction = CandidateSelector.merge(candidates_collector)
-            print(final_prediction)
+            best_candidates = final_prediction.get_best_candidates()
+
+            self._log_final_candidates(best_candidates)
         else:
             # TODO implement for images, maybe even docx.
             return None
 
         tmp_dir_obj.cleanup()
+        tf = time.time() - ts
+        print(f"Data Extraction on {str(document_path)} took {(tf / 60):.2f}min.")
 
 
     def predict(self,
@@ -189,6 +195,11 @@ class DonutCLEM:
         """
         return sum([i * (2 ** idx) for idx, i in enumerate(sections[::-1])])
 
+    @staticmethod
+    def _log_final_candidates(candidates: dict):
+        import json
+        print(json.dumps(candidates, indent=2))
+
 
 if __name__ == '__main__':
     MODEL_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\weights\20251016_090333")
@@ -205,7 +216,7 @@ if __name__ == '__main__':
     # print(output)
 
     # Test with full document
-    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\documents\christine_04.pdf")
+    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\documents\klaas_04.pdf")
     donut = DonutCLEM(MODEL_PATH)
 
     donut.predict_document(DOCUMENT_PATH)

@@ -20,7 +20,8 @@ class PageNumberCondition(WeakCondition):
             'id_',
             'corp',
             'vendor',
-            'po'
+            'po',
+            'cur',
         ]
 
         for field_name in fields_for_which_page_idx_matters:
