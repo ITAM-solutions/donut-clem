@@ -11,7 +11,7 @@ from unittest.mock import patch
 from parameterized import parameterized
 from datetime import datetime
 
-import clem.candidates.collector as collector
+import clem.candidates.collector as module
 from clem.datatypes import DataTypes
 from clem.datatypes.currency import Currency
 
@@ -25,7 +25,7 @@ class TestFieldCandidate(unittest.TestCase):
         ["004", "01/30/2025", DataTypes.date, datetime(year=2025, month=1, day=30), datetime],
     ])
     def test_datatypesConversion_validValues(self, _test_idx, data, dtype, expected_value, expected_type):
-        candidate = collector.FieldCandidate(
+        candidate = module.FieldCandidate(
             value=data,
             datatype=dtype
         )
@@ -39,7 +39,7 @@ class TestFieldCandidate(unittest.TestCase):
     def test_datatypesConversion_valueRawRemainsIntact(self):
         raw_val = "123"
 
-        candidate = collector.FieldCandidate(
+        candidate = module.FieldCandidate(
             value=raw_val,
             datatype=DataTypes.int
         )
@@ -57,7 +57,7 @@ class TestFieldCandidate(unittest.TestCase):
         ["004", "invalid_date", DataTypes.date],
     ])
     def test_datatypesConversion_conversionFailedSetsFlag(self, _test_idx, data, dtype):
-        candidate = collector.FieldCandidate(
+        candidate = module.FieldCandidate(
             value=data,
             datatype=dtype
         )
@@ -70,7 +70,7 @@ class TestFieldCandidate(unittest.TestCase):
         self.assertTrue(conversion_error)
 
     def test_emptyValue_isNoneFlagSetToTrue(self):
-        candidate = collector.FieldCandidate(
+        candidate = module.FieldCandidate(
             value=None,
             datatype=DataTypes.int
         )
@@ -80,16 +80,16 @@ class TestFieldCandidate(unittest.TestCase):
 
 class TestProductCandidate(unittest.TestCase):
     def test_productAsDict(self):
-        candidate = collector.ProductCandidate(
-            name=collector.FieldCandidate('foo1', DataTypes.str),
-            sku=collector.FieldCandidate('foo2', DataTypes.str),
-            qty=collector.FieldCandidate('foo3', DataTypes.str),
-            met=collector.FieldCandidate('foo4', DataTypes.str),
-            metgr=collector.FieldCandidate('foo5', DataTypes.str),
-            dfrom=collector.FieldCandidate('foo6', DataTypes.str),
-            dto=collector.FieldCandidate('foo7', DataTypes.str),
-            unpr=collector.FieldCandidate('foo8', DataTypes.str),
-            totpr=collector.FieldCandidate('foo9', DataTypes.str),
+        candidate = module.ProductCandidate(
+            name=module.FieldCandidate('foo1', DataTypes.str),
+            sku=module.FieldCandidate('foo2', DataTypes.str),
+            qty=module.FieldCandidate('foo3', DataTypes.str),
+            met=module.FieldCandidate('foo4', DataTypes.str),
+            metgr=module.FieldCandidate('foo5', DataTypes.str),
+            dfrom=module.FieldCandidate('foo6', DataTypes.str),
+            dto=module.FieldCandidate('foo7', DataTypes.str),
+            unpr=module.FieldCandidate('foo8', DataTypes.str),
+            totpr=module.FieldCandidate('foo9', DataTypes.str),
         )
 
         expected_dict = {
@@ -107,16 +107,16 @@ class TestProductCandidate(unittest.TestCase):
         self.assertEqual(expected_dict, candidate.dict)
 
     def test_productIsComplete(self):
-        candidate = collector.ProductCandidate(
-            name=collector.FieldCandidate('foo', DataTypes.str),
-            sku=collector.FieldCandidate('foo', DataTypes.str),
-            qty=collector.FieldCandidate('foo', DataTypes.str),
-            met=collector.FieldCandidate('foo', DataTypes.str),
-            metgr=collector.FieldCandidate('foo', DataTypes.str),
-            dfrom=collector.FieldCandidate('foo', DataTypes.str),
-            dto=collector.FieldCandidate('foo', DataTypes.str),
-            unpr=collector.FieldCandidate('foo', DataTypes.str),
-            totpr=collector.FieldCandidate('foo', DataTypes.str),
+        candidate = module.ProductCandidate(
+            name=module.FieldCandidate('foo', DataTypes.str),
+            sku=module.FieldCandidate('foo', DataTypes.str),
+            qty=module.FieldCandidate('foo', DataTypes.str),
+            met=module.FieldCandidate('foo', DataTypes.str),
+            metgr=module.FieldCandidate('foo', DataTypes.str),
+            dfrom=module.FieldCandidate('foo', DataTypes.str),
+            dto=module.FieldCandidate('foo', DataTypes.str),
+            unpr=module.FieldCandidate('foo', DataTypes.str),
+            totpr=module.FieldCandidate('foo', DataTypes.str),
         )
 
         self.assertTrue(candidate.is_complete)
@@ -150,7 +150,7 @@ class TestCandidateCollector(unittest.TestCase):
 
         metadata = {'foo': 'bar'}
 
-        candidate_collector = collector.CandidateCollector()
+        candidate_collector = module.CandidateCollector()
         candidate_collector.add(mock_prediction_schema, metadata=metadata)
 
         from pathlib import Path
@@ -168,7 +168,7 @@ class TestCandidateCollector(unittest.TestCase):
         for candidate_field, (candidate_value, candidate_dtype) in invoice_fields_expected_actual_pairs:
             self.assertEqual(
                 candidate_field,
-                [collector.FieldCandidate(
+                [module.FieldCandidate(
                     value=candidate_value,
                     datatype=candidate_dtype,
                     metadata=metadata,
@@ -191,12 +191,47 @@ class TestCandidateCollector(unittest.TestCase):
             for idx, product in enumerate(candidate_collector.products):
                 self.assertEqual(
                     getattr(product, product_field_name),
-                    collector.FieldCandidate(
+                    module.FieldCandidate(
                         value=candidates_values[idx],
                         datatype=candidate_dtype,
                         metadata=metadata,
                         score=0
                     ))
+
+    def test_getBestCandidates_multipleBestCandidatesCanBeRetrieved(self):
+        candidate_collector = module.CandidateCollector(id_=[
+            module.FieldCandidate(value="foo1", datatype=DataTypes.str, score=10.0),
+            module.FieldCandidate(value="foo2", datatype=DataTypes.str, score=10.0),
+            module.FieldCandidate(value="foo3", datatype=DataTypes.str, score=8.0),
+        ])
+
+        expected_subset = {'id_': ['foo1', 'foo2']}
+
+        actual = candidate_collector.get_best_candidates()
+        self.assertEqual(actual, {**actual, **expected_subset})
+
+    def test_getBestCandidates_emptyListsWhenNoCandidates(self):
+        candidate_collector = module.CandidateCollector()
+        empty_best_candidates = candidate_collector.get_best_candidates()
+        for field_name in empty_best_candidates:
+            if field_name != "products":
+                self.assertEqual(empty_best_candidates[field_name], [])
+            else:
+                self.assertEqual(empty_best_candidates[field_name], {})
+
+    def test_getBestCandidates_retrievesRawValues(self):
+        # Testing with all possible datatypes.
+        candidate_collector = module.CandidateCollector(id_=[
+            module.FieldCandidate(value="sample-text", datatype=DataTypes.str, score=0.0),
+            module.FieldCandidate(value="01/02/25", datatype=DataTypes.date, score=0.0),
+            module.FieldCandidate(value="12.34", datatype=DataTypes.price, score=0.0),
+            module.FieldCandidate(value="123", datatype=DataTypes.int, score=0.0),
+            module.FieldCandidate(value="EUR", datatype=DataTypes.currency, score=0.0),
+        ])
+        best_candidates = candidate_collector.get_best_candidates()
+        expected_values = ['sample-text', '01/02/25', '12.34', '123', 'EUR']
+        for expected, actual in zip(expected_values, best_candidates['id_']):
+            self.assertEqual(expected, actual)
 
 
 if __name__ == '__main__':

@@ -165,7 +165,6 @@ class CandidateCollector:
 
     def get_best_candidates(self):
         """
-        # TODO take care of cases where two or more candidates get the same score
         :return:
         """
 
@@ -173,7 +172,12 @@ class CandidateCollector:
 
         # Invoice fields
         for f_name, options in self.invoice_fields.items():
-            best[f_name] = max(options, key=lambda x: x.score).value_raw if options else None
+            # Get just the options with the higher score
+            filtered_options = list(filter(
+                lambda option: option.score == max(options, key=lambda x: x.score).score,
+                options
+            ))
+            best[f_name] = [option.value_raw for option in filtered_options]
 
         # Products
         best['products'] = self.products_fields
