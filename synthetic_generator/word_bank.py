@@ -377,6 +377,7 @@ PRODUCT_ADDITIONAL_FIELDS = {
     'tax_rate': (FieldType.Percentage, ('Tax Rate', 'VAT %', 'GST %', 'Tax %', 'Tax Percentage')),
     'tax_amount': (FieldType.Price, ('Sales Tax', 'VAT', 'GST', 'Tax', 'Tax Amount')),
     "subscription_period": (FieldType.DateRange, ("Subscription Period", "Period", "Service Period", "Billing Period", "Coverage Period", "Contract Period", "Duration")),
+    "serial": (FieldType.UUID, ("Serial Number", "Serial No.", "Product Serial")),
 }
 
 PRODUCT_FIELD_GROUPS = [
@@ -400,7 +401,7 @@ PRODUCT_FIELD_GROUPS = [
 PRODUCT_FIELD_GROUPS_SPECIAL = {
     "017": ("idx", "name", "qty", "met", "unpr", "totpr", "tax_rate", "tax_amount", "disc_rate", "disc_amount"),
     "020": ("qty", "name", "sku", "subscription_period", "unpr", "totpr"),
-    "021": ("idx", "sku", "name", "qty", "dfrom", "dto", "tax_amount", "disc_amount", "unpr", "totpr"),
+    "021": ("idx", "sku", "name", "qty", "dfrom", "dto", "tax_amount", "disc_amount", "unpr", "totpr", "serial", "tax_rate"),
 }
 
 CONTACT_INFO_FIELDS = {

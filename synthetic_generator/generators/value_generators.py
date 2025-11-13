@@ -122,7 +122,8 @@ def get_uuid(config: DocxConfig, **kwargs) -> str:
     group_length = random.randint(4, 6)
     vocab = ascii_uppercase + digits
 
-    text = '-'.join(''.join(random.choice(vocab) for _ in range(group_length)) for _ in range(num_groups)) # Removes ending hyphen
+    sep = random.choice([' ', '-'])
+    text = f'{sep}'.join(''.join(random.choice(vocab) for _ in range(group_length)) for _ in range(num_groups)) # Removes ending hyphen
     return text
 
 

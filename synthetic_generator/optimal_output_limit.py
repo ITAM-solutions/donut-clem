@@ -98,13 +98,8 @@ def compute_metrics_from_tokens(tokens_info: dict) -> dict:
         "NUM SAMPLES": len(tokens_list),
         "ACTUAL MODEL LIMIT": tokens_info["model_output_limit"],
         "EXCEEDED CASES": tokens_info["exceeded_cases"],
-        # "EXCEEDED CASES AVG": exceeded_cases_avg,
-        # "EXCEEDED CASES - MEDIAN": exceeded_cases_median,
-        # "EXCEEDED CASES - PERCENTILE 75": exceeded_cases_percentile_75
         **proposals
     }
-
-
 
 
 if __name__ == '__main__':
