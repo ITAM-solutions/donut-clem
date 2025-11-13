@@ -1,0 +1,811 @@
+Ladislav Dufek
+FLEXTECH INC.
+DHI Group
+Nextcloud
+VSee Lab Inc
+ZyLinc
+BeyondTrust Software
+Rockwell Automation
+Efficient Elements GmbH
+Meazure Learning
+Zoom
+YAMAHA
+SEIKO EPSON CORPORATION
+Cremer Programmentwicklung GmbH
+Angus Johnson
+Tank Studios
+SlimWare Utilities
+LibRaw LLC
+MetaGeek, LLC
+Scooter Software
+EasyMorph
+TRICENTIS
+SUPERHUMAN
+Flexibits
+Nsasoft LLC
+Secomea
+Emulex
+Wacom Technology
+Computers and Structures
+Tenable Network Security
+LIGHTNING UK!
+Canneverbe Limited
+Open Design Alliance
+Gentee, Inc.
+SMA Solar Technology AG
+Campbell Scientific
+Magic Utilities
+Johannes Wallroth
+DigiDNA
+Zscaler
+Red Gate Software
+NewSoft Technology
+Mixxx Development Team
+Copernic Technologies Inc.
+Softouch
+ESU electronic solutions ulm GmbH & Co. KG
+ZTE
+Panduit
+Cockos
+Snow Software AB
+In-Situ Inc.
+Viber Media
+AnMo Electronics
+Comfort Software Group
+LibreWolf
+Paxton Access Limited
+UpNote
+Cjwdev
+MiKTeX.org
+Pico Technology
+Ben Olden-Cooligan.
+Sharpened Productions
+AltStore
+NetSDK Software, LLC
+SteadyMouse LLC
+Tactivos Inc
+Rico Suter
+Statistical Innovations
+Broadcast Equipment
+XYZprinting
+xiles
+3D Systems
+Applied Imagery
+iMyfone Technology
+David Harris
+RingCentral
+AgileBits
+MOOII TECH
+SOFTWAREPAQ
+Advanced Micro Devices
+APOWERSOFT LIMITED
+MPC-HC Team
+Spectrum Software
+Nero AG
+Mega Limited
+Pythagoras BVBA
+PC SOFT
+US Department of Energy
+Alpha Software, Inc.
+Arkanesystems
+Ansys
+Genie9 Corporation
+Sinew Software Systems
+Primate Labs
+New River Kinematics
+TopoGrafix
+ShareX Developers
+InterCAD Kft.
+eRecruitment Solutions
+pdfforge
+ACD Systems International
+SigmaTEK Systems, LLC
+DocFetcher Development Team
+Zabbix SIA
+Ollama
+Engineering Graphics (NSW) Pty Ltd
+Laurent Cozic
+BrightSign
+EIVA
+LTR Data
+Moritz Bunkus
+Google
+Accusoft
+Futuremark
+FileOpen Systems
+Seequent Limited
+Esko
+CData Software
+SafeNet
+Hanwha Group
+Brother Industries
+Igor Pavlov
+Tridium Inc
+Devolutions Inc
+ES Computing
+Canva Pty Ltd
+FlashPeak
+Datacomp
+Winsplit-Revolution
+EMCO Software
+PortSwigger Ltd.
+nunit.org
+Ultra@VNC
+SMART Technologies ULC
+BELIMO
+Unity Technologies ApS
+Aignes
+KiCad 
+EnSoft
+CoreFTP
+Nlitesoft d.o.o.
+Ivan Costales Suarez
+Packetizer
+Devart
+HMS Industrial Networks
+Dassault Systems
+STMicroelectronics
+Dominik Reichl
+DeepL GmbH
+Rosetta Stone
+JoeJoe Soft
+Binary Fortress Software
+DYMO
+SmartBear Software
+EOL
+Yousician Oy
+Thomas Wolff, Andy Koppe
+Nenad Hrg
+Mythicsoft
+EXP Systems LLC
+MindGems
+MSP360
+Environmental Systems Research Institute
+Crystal Rich, Ltd.
+Panasonic
+Romain Petges
+KUBUS BV
+Basler Electric
+Elasticsearch
+AOC
+Sonos
+Devin Cook
+NGWIN
+emachineshop.com
+PRUFTECHNIK
+Coupons.com
+Duet, Inc
+Ghisler Software GmbH
+Elekon AG
+FastStone Soft
+AspenTech
+EASEUS
+Insight Software Solutions
+Valve
+FontLab
+Neodynamic
+VeryPDF.com
+Atlassian
+Safer Networking Limited
+Nikon
+alfaview® gmbh
+Amazon
+Pismo Technic
+TypingMaster
+12noon
+Power-user SAS
+METREL d.d.
+Attachmate
+LinkedIn
+Bexel Consulting
+Cytoscape Consortium
+MadCap Software
+Anton Paar GmbH
+Silhouette America
+PittaSoft
+AutoIt Team
+CADlink Technology Corporations
+Nuts About Nets, LLC
+Nartac Software
+Stedman Solutions
+Bosch
+iMobie
+AutomaticSolution Software
+IDA
+Ventana Systems, Inc
+KeePassXC Team
+3COM
+Ping Identity
+WiseCleaner.com
+Trimble Navigation Limited
+The CefSharp Authors
+Drumlin Security
+Atomi Systems
+Schenk & Horn
+XnSoft
+Axis Communications
+Data Quality Apps
+Asseco Poland S.A
+General Electric
+WebCatalog
+mpv.io
+Krisp Technologies, Inc.
+TEC-IT Datenverarbeitung GmbH
+Maglr
+Chaos Software
+Bricsys
+Procore Technologies, Inc.
+Ilium Software
+EDC Electronic Design Chemnitz GmbH
+Nurgo Software
+Aircall
+Rocscience
+Grant Instruments (Cambridge)
+Ross-Tech
+Dustin Kirkland
+Tysoft Software Ltd
+Janitza electronics GmbH
+Blackfish Software
+Irfan Skiljan
+Ledger SAS
+Splashtop
+Owl Labs
+Wisdom Software
+KC Softwares
+John MacFarlane
+LaserSoft
+Ellab A/S
+Travis Krumsick
+DotFix Software
+National Instruments
+Yubico
+EZ5 Systems Ltd.
+JAM Software
+Swiss Academic Software
+reMarkable
+NVIDIA
+the IPython development team
+ZeroTier, Inc.
+GfK Kynetec
+Act-3D B.V
+Flachmann & Heggelbacher
+NirSoft
+AnyDWG Software
+InMusic Brands, Inc
+Idyllic Pixel
+Pascal Brachet
+Digi International
+Recovery Toolbox
+1C Company
+MOTOROLA
+GeoLogismiki
+Michael Oborne
+Corsair Components
+rawtherapee.com
+Safe Software Inc.
+Baldur Karlsson
+12d Solutions
+Western Digital
+GuinpinSoft inc
+Eterlogic
+Epic Games
+SystemTools Software
+Fluke
+Tran Ky Nam Software
+GoTo Group, Inc.
+RealVNC
+Malvern Instruments Limited
+PKWARE
+Anaconda Inc
+Coral Creek Software
+Botkind
+Phoenix Contact
+Pix4D
+T1V
+Respondus
+QlikTech International AB
+BandLab Technologies
+Equi4 Software
+Zeplin.io
+InterActual Technologies
+KDE e.V.
+Palo Alto Networks
+Anritsu Company
+FARO Scanner Production
+Aide CAD Systems
+SEGGER
+Krzysztof Kowalczyk
+Xrev Pty Ltd
+Banco Itaú
+Averill M. Law & Associates Inc.
+Dahua Technology Co.
+Dlubal Software GmbH
+Electronics For Imaging
+The MathWorks
+Adroit Technologies
+A-PDF
+Bare Metal Software Pty Ltd.
+HYDAC
+Duong Dieu Phap
+ClockworkMod
+algoriddim GmbH
+Tailscale Inc.
+TrueCrypt Foundation
+Bartels Media GmbH
+TENCENT
+Ivan Anton Albarracin
+Siber Systems
+LogTag North America Inc.
+soft Xpansion
+SigmaXL
+Environmental Simulations Inc.
+Gemini Data Loggers
+Bentley Systems
+App Dynamic
+TigerVNC project
+Realtime Soft
+MongoDB
+MITSUBISHI ELECTRIC CORPORATION
+YoutubeDownloaderHD
+MAXON Computer
+TechniCAL
+METTLER TOLEDO
+Synology
+IdeaMK
+Rob Latour
+Atmel
+Apple
+Stratasys
+Flameshot
+Informer Technologies
+IBExpert Ltd
+Canon
+Albus Bit SIA
+Logitech
+LopeSoft.
+Perspective Software
+Caliper Corporation
+SONY
+Everimaging, Ltd.
+Tanuki Software Ltd.
+Vidyo
+Mendeley
+PACTware Consortium
+Serif (Europe)
+Tekscan
+Quest Software
+Advanced Mouse Auto Clicker ltd
+OLYMPUS AMERICA, INC.
+dotPDN LLC
+Flexera Software LLC
+Rosslare Enterprises
+Articulate
+Celemony Software GmbH
+Vitzo Limited
+VB-Audio Software
+u-blox AG
+Core Technologies Consulting, LLC
+Ministry of the Interior of the Slovak Republic
+The Wireshark developer community
+Purslane Ltd.
+AVSoft Corp
+Treexy
+BlueJ Team
+Pleora Technologies
+Mailbird
+COJALI, S.L.
+ProjectLibre
+Tech Smith
+Astonsoft
+Prusa Research s.r.o.
+Crestron Electronics
+WebGear
+CYME
+Adobe Systems
+Elias Fotinis
+AT&T
+Image Line Software
+2BrightSparks
+Shenzhen Arashi Vision Co., Ltd.
+Huawei Technologies Co.,Ltd
+SAP
+PreEmptive Solutions
+Alcpu
+Sophos Limited
+Ventis Media
+NXLog
+SAPIEN Technologies
+Stardock
+DiRoots Limited.
+EasternGraphics
+Robert McNeel & Associates
+ProfiCAD
+MCL Technologies
+Software995
+RandyRants
+Cisco Systems, Inc.
+NCH Software
+VMware, Inc.
+Lloyds Register Capstone
+SecCommerce
+Synaptics
+Ramen Software
+GISware Integro LLC
+Shrew Soft
+Remo Software
+Peter Pawlowski
+Uderzo Umberto
+Softfever
+Civilserve GmbH
+EMQ Technologies Co., Ltd
+Cognex
+DOSBox
+Parsec Cloud, Inc.
+Movavi
+Simulation Lab Software
+Meta Platforms, Inc.
+Free Astro
+Baumer
+Foxit
+Totusoft
+QNAP Systems
+Weintek Labs.
+JetBrains
+Solvusoft
+Valentin Software, Inc.
+The R Foundation
+Lawrence Berkeley National Laboratory
+Bytedance Pte. Ltd.
+Kahoot!
+Bluemail
+Goversoft LLC
+ComAp a.s
+CAMILLE BAUER AG
+DynEd International
+Nemetschek
+DearMob Inc
+Fortinet
+Steven Mayall
+Descript
+SICK AG
+ThinkCell
+IDS Imaging Development Systems GmbH
+Blue Marble Geographics
+hikvision
+David Kleiner
+Octopus Deploy Pty.
+Snipaste
+NREL/Alliance for Sustainable Energy
+Via Traffic Controlling gmbh
+Bloomberg L.P
+BrowserStack
+Digital Technologies LLC
+Livermore Software Technology Corporation
+SEW-EURODRIVE GmbH & Co KG
+Advanced System Repair Inc
+Peter B. Clements
+IC#Code
+SHIMANO INC.
+Airtame
+Datalogic
+Pearson Education
+PostgreSQL Global Development Group
+LightySoft
+Hamrick Software
+New House Internet Services B.V
+Receita Federal do Brasil
+Power Software
+Ubisoft
+Bopsoft
+Carlo Medas
+Shenzhen Creality 3D Technology Co., Ltd.
+Mango3D
+Audinate.com
+GitExtensions
+Raize Software
+Testo AG
+Freedesktop
+DigiExam
+WebMinds
+NEDAP N.V
+Relux Informatik AG
+Flux Software
+Addinsoft
+CISOfy
+Svantek
+Mimecast Services Ltd.
+Tom Ehlert Software
+Jupyter
+Synametrics Technologies
+Skyline Software Systems
+Technetix Group Limited
+Hexagon AB
+Garmin Ltd or its subsidiaries
+Marek Jasinski
+Microsoft
+TechPowerUp
+Free Download Manager
+Testometric
+Open Text
+Axosoft LLC
+Resilio, Inc.
+Fujitsu
+ProgeSOFT
+Power Admin LLC
+Planglow Ltd
+Gallium Digital
+Allround Automations
+Sugar Bytes
+4Team Corporation
+CGSecurity
+IMU Andreas Baumann
+Salesforce, Inc.
+Stand By Soft
+SoftSoft Ltd
+Safran Software Solutions
+TranslucentTB Open Source Developers
+Aprelium Technologies
+EPA
+Mojosoft
+Figma
+EZB Systems
+Janea Systems, Inc.
+Avid Technology
+Friedemann Schmidt
+SumTotal Systems
+Zhorn Software
+Veeam Software
+Panopto
+Smartsheet Inc.
+Aivar Annamaa
+Alan Phillips
+Code Sector
+Bastien Mensink - A Must in Every Office BV
+Wide Angle Software
+Danfoss Drives
+Doist
+PACE Anti-Piracy
+Freebyte!
+Transoft Solutions
+BlueStacks
+Don HO
+MKLab, Co
+WMHelp Software
+The Document Foundation
+Progress Software
+Sublime HQ Pty
+El Software Solutions
+Open Broadcaster Software
+KingswaySoft Inc
+JanDeDobbeleer
+The Transtec Group
+Relay GmbH
+3Dflow srl
+Dropbox
+Mirek Wojtowicz
+TestReach
+Anker Technology Ltd
+GRASS Development Team
+FinePrint Software, LLC
+Tarlogic Security
+University of Illinois
+Roland DG
+Kensington Computer Products Group
+ZOHO
+Waves Audio
+Aztec
+yWorks GmbH
+Companion Software
+SailPoint Technologies Holdings, Inc
+Luis Cobian
+Orica Australia Pty Ltd
+Office Timeline
+Metrohm
+Knowbe4, Inc.
+Audicon GmbH
+TunnelBear Inc
+Jay Prall
+Claris International Inc.
+Mozilla
+NeoSmart Technologies
+CDVI Ltd.
+LilyPond Software Design
+Softland
+Mattermost
+Gossenmetrawatt.com
+Arecont Vision
+GRAHL Software Design
+Jim Radford
+Honeywell
+F5 Networks
+3T Software Labs GmbH
+Moonchild Productions
+Eugene Roshal & Far Group
+angryziber
+LanSweeper
+3Dconnexion
+Zebra Technologies
+LogMeTT.com
+Wondershare Software
+LizardSystems
+Engineering Power Tools Software
+Altova
+Raimersoft
+OpenVPN Technologies
+Idera
+PlotSoft LLC
+IVT
+Resplendence Software Projects Sp
+Guthrie CAD/GIS Software Pty Ltd.
+MAX Systems
+instedit.com
+Adaptiva
+InfluxData, Inc
+Fantaisie Software
+Moomoo Technologies Inc
+Barco
+Hagel Technologies
+Avenza Systems Inc
+Changemaker Studios
+Housatonic, Inc
+VanDyke Software
+Christian Kindahl
+Star Information Systems AS
+Claro Software
+SWIFT
+ABBOTT LABORATORIES
+Topcon
+GNOME Project, The
+Northern Technologies Parklife AB
+PEAK-System Technik GmbH
+MOBATEK
+Threema GmbH
+Thibaut Lauziere
+Schneider Electric
+První certifikační autorita I.CA
+Razer
+iterate GmbH
+Wez Furlong
+SAS Institute Inc.
+ABB
+Hager
+Winaero
+Autodesk
+NT-ware Systemprogrammierung GmbH
+WhatPulse
+eMudhra Limited
+Passmark Software
+PTC Inc.
+David THOIRON
+SpiceBrains
+H2O.ai
+ownCloud
+Codec Guide
+DeepSoftware LLC
+GN Group
+Aomei Technology Co.
+Duplicate Finder
+Centered Systems
+Kingsoft
+VirtualTraining s.r.o.
+PolySoft Solutions
+Cold Turkey Software
+On Center Software
+Mirage Computer Systems
+WIBU-SYSTEMS AG
+Neumetrix Limited
+Thomas Nordquist
+Grammarly
+KEYENCE
+Nessoft, LLC
+Guy Teverovsky
+Hewlett-Packard
+LSoft Technologies
+Izenpe S.A.
+Nicke Manarin
+Simon Tatham
+Oracle
+Flash-Integro
+Anysphere
+PeopleCert
+Geek Software GmbH
+Lennert Ploeger
+Odoo S.A.
+Skillbrains
+Ajilal Vijayan
+Firebird Project
+ABBYY
+SOTI
+Surfshark
+Reincubate
+Crystal Dew World
+Sebastian Dörfler
+NextGen
+ITEKSOFT Corporation
+Kryterion Inc
+Bambu Lab
+Buhl Data Service GmbH
+P.I. Engineering
+FLIR Systems
+Element Labs Inc
+Equisys plc
+Glarysoft
+SolarWinds
+Gilles Chanteau
+Box
+ActiveState
+Real Networks
+JD Stuart Ltd
+Fieldston Software
+Tyco Electronics
+Lighthouse UK
+Lumivero
+Nuance Communications
+Loom, Inc.
+Drawboard
+Proton AG
+Solinst
+DRAGER
+Paessler AG
+Wooting
+C Thing Software
+Ariya Hidayat
+LearnPulse
+UCWeb
+Anghami
+MOBOTIX AG
+Helios
+Vivaldi Technologies
+MatchWare A/S
+Lufft
+SnapDownloader
+Pantaray
+Isograph Ltd.
+Gener8
+dihav
+AstroComma
+Blurb
+Infragistics
+PDF Technologies
+Davis Instruments
+SatoshiLabs
+Datamax O'Neil
+IBM
+AeroAdmin LLC
+FlexSim Software Products Inc.
+3D-Tool GmbH & Co. KG
+Tracker Software Products (Canada)
+Boris FX, Inc.
+Simnet
+Neovim
+Antibody Software
+Jamovi
+Posit Software, PBC
+Ever Accountable
+FxSound
+QGIS
+Paul Woolcock
+Fischerwerke
+beeper
+The Tor Project, Inc.
+Lascar Electronics Ltd.
+Brady
+Moxa
+EMD International
+Asana, Inc.
+BackToCAD Technologies, LLC
+Siemens AG
+Acro Software
+DIAL GmbH
+Polar Electro Oy
+RockWare
+IndigoSTAR Software
+QiSOFT
+darktable team
+SoftByte Laboratories
+Teleste
+IDEA StatiCa
+Tenorshare
+Caphyon
+Famatech
+WorkFlowy

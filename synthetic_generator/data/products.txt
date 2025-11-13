@@ -1,0 +1,1218 @@
+.NET Developer Bundle
+123scan
+12d Model
+1C:Enterprise
+1Password
+3CDaemon
+3D Builder
+3DF Zephyr
+3DMark
+3D-Office
+3DSPRINT
+3D-Tool
+3DxCollage
+3DxWare
+5KPlayer
+7-Zip
+A Ruler for Windows
+Abyss Web Server
+Access Console
+Account Lockout Status
+ACDSee
+Acrylic WiFi
+Active Directory Management Pack Helper Object
+Active Directory Rights Management Services Client
+Active@ ISO Burner
+ActiveBarcode
+ActivePerl
+ActivePresenter
+ActiveTcl
+AD FastReporter
+AD Info
+AD Photo Edit
+Adaptiva Workbench
+Adobe XD
+ADRestore.NET
+Adroit
+Advance Steel
+Advanced Installer
+Advanced IP Scanner
+Advanced System Repair
+AEOS
+Aeroadmin
+AES Crypt
+Affinity Photo
+Affinity Publisher
+Agent Ransack
+Aide PDF to DXF Converter
+AI-Navigator
+AIR Xpand!2
+Aircall
+AirHost
+AirMedia
+AirServer
+AIRTAME
+alfaview
+Allplan
+Allway Sync
+Alpha Five
+AltovaXML
+AltServer
+Amazon Chime
+Amazon Music
+Amazon Photos
+AMD Software
+AM-DeadLink
+Anaconda
+Android Studio
+Anghami
+Angry IP Scanner
+AnkerWork
+ANTS Memory Profiler
+ANTS Performance Profiler
+Any DWG DXF Converter
+AnyBurn
+AnyMiro
+AnyTrans
+AnywhereUSB
+A-PDF Merger
+APILE
+Aplicativo Itaú
+ApowerMirror
+ApowerREC
+AquaSnap
+ArcCatalog
+ArcGIS 3D Analyst
+ArcGIS Data Interoperability
+ArcGIS Desktop
+ArcGIS for AutoCAD
+ArcGIS License Manager
+ArcGIS Pro
+ArcGIS Server
+ArcGlobe
+ArcMap
+ArcReader
+Articulate 360
+ArtiosCAD
+Asana
+ASAP Utilities
+Aspen Calc
+Aspen InfoPlus.21
+Aspen Process Explorer
+Aspen Production Record Manager
+AstroGrep
+AT&T Global Network Client
+aText
+Atmel Studio
+ATRIUM Finder
+Attribute Changer
+Audiate
+AudioNote
+AutoCAD
+AutoCAD Architecture
+AutoCAD Electrical
+AutoCAD LT
+AutoCAD Map 3D
+AutoCAD Mechanical
+AutoCAD MEP
+AutoCAD Plant 3D
+AutoCAD Raster Design
+AutoCAD Revit LT Suite
+AutoCAD Structural Detailing
+AutoCAD VBA Enabler
+AutoIt
+Automation License Manager
+AutoTURN
+AV IP Utility
+Avid Link
+Awesome Duplicate Photo Finder
+AXIS Camera Companion
+AXIS Camera Station
+AXIS Media Control
+AxisVM
+AxTraxNG Client
+Azure Connected Machine Agent
+Azure Data Studio
+Azure File Sync Agent
+BalanceLink
+Bamboo Paper
+Bambu Studio
+Barcode Xpress
+BareTail
+BAR-ONE
+Base SAS
+Basilisk
+BatExplorer
+Beeper
+Bentley View
+Bexel Manager
+Beyond Compare
+BIG-IP Edge Client
+BIM Vision
+BIMCollab Zoom
+Blackvue
+BLL
+Bloomberg SFD Data Dictionary
+Blue Iris
+BlueJ
+Bluemail
+BlueScreenView
+Bluesoleil
+BlueStacks
+BookWright
+Box Edit
+Box Sync
+Box Tools
+Brady Workstation
+BricsCad
+BricsCAD Communicator
+Bright Author Connected
+BrightAuthor
+BrowserStack
+BulkFileChanger
+BurnInTest
+Burp Suite
+BusinessCards MX
+BusinessObjects
+Byobu
+C4dpy
+CableIQ Reporter
+CAD2Shape
+Caffeine
+Cakewalk
+CALSoft
+Camera Light Switch Utility
+Camera Utility
+Camo Studio
+Canva
+CapCut
+Capinfos
+CAPLAN
+CATVisor Commander
+CB-Manager
+CC-Vision
+CData SQL Broker
+CDBurnerXP
+CefSharp
+Change MAC Address
+Chrome Remote Desktop
+Cinema 4D
+CineRender
+Cineware
+Cisco Jabber
+Citavi
+Claro Voice Setup
+ClaroCapture
+ClaroIdeas
+ClaroPDF
+ClaroRead
+ClaroView
+ClickShare
+Clickshare Launcher
+CLIP PROJECT Planning
+Clipchamp
+ClipClip
+CloudBerry Explorer
+cMT Viewer
+Cobian Backup
+CodeMeter
+CodeMeter Control Center
+CodeMeter Runtime Kit
+CodeSite Tools
+Cold Turkey Blocker
+Color Cop
+CompactView
+Company Portal
+Convert To Rinex
+Coordinate System Manager
+Copernic Desktop Search
+Core FTP
+Core FTP Server
+Core Temp
+Cosmos Browser
+Coupon Printer
+CPeT-IT
+CRBasic editor
+Creality Print
+Creo View
+CryptoARM
+CrystalDiskInfo
+CrystalDiskInfo Portable
+CrystalDiskMark
+CSViewer
+CUDA Toolkit
+Cursor
+CutePDF
+CutePDF Form Filler
+CutePDF Writer
+CutStudio
+Cyberduck
+CYMCAP
+Cytoscape
+DameWare Exporter
+DameWare Mini Remote Control
+DameWare NT Utilities
+Dante Control and Monitoring
+Dante Controller
+darktable
+Database Health Monitor
+DataLoad
+DataQualityTools
+dbForge Data Compare for SQL Server
+dbForge Data Generator for SQL Server
+dbForge Query Builder for SQL Server
+dbForge Schema Compare for SQL Server
+dbForge SQL Complete
+dbForge SQL Decryptor
+dbForge SQL Tools
+Debut Video Capture Software
+DeepL
+DEEPSOIL
+Deepview
+Dependency Walker
+Descript
+DeskPins
+DesktopOK
+DfuSe
+DHCP Explorer
+DIALux
+DIALux evo
+Digi Device Discovery
+Digi Navigator
+DigiExam
+DIGSI
+DinoCapture
+DIRF
+DiRootsOne
+Display Changer
+Display Rotation Tool
+DisplayFusion
+djay
+DL.Code
+DocFetcher
+Docklight
+Dockworks
+DOSBox
+Dotfuscator
+Dotfuscator and Analytics
+Dragon NaturallySpeaking
+Drawboard PDF
+Drawing Purge
+Drive SnapShot
+Driver Fusion
+DriverDoc
+DriverUpdate
+DroidKit
+Dropbox
+DSS Player
+DU Meter
+Duet Display
+Dumpcap
+Duplicate Photo Cleaner
+DYMO Connect
+Dynamo Revit
+DynEd
+Easergy Studio
+EaseUS Data Recovery Wizard
+EASEUS Partition Manager
+Easy Access
+Easy Photo Scan
+Easy PNG to Icon
+EasyBCD
+EasyBuilder Pro
+EasyCert
+easyEmission
+easyHeat
+EasyLog USB
+easyMap Tools
+Easy-Mark
+easyTest Tools
+EasyWorship
+eBUS Player
+eCopy PDF Pro Office
+eCopy ShareScan
+e-Design
+Editcap
+EditPlus
+eDocPrinter PDF Pro
+Efficient Elements for Presentations
+eID Client
+Ekip Connect
+eMachineShop
+emBridge
+EMCO Ping Monitor
+eMudhra
+Encrypt PDF
+EnergyPlus
+Engineering Power Tools
+Enpass
+Enscape
+EOS Utility
+EOS Webcam Utility
+EPANET
+Epic Games Launcher
+Epic Pen
+Epson Event Manager
+Epson Print CD
+EpsonNet Config
+eRecruiter
+EssentialPIM
+ETABS
+E-tube Project
+Ever Accountable
+Evolver
+eWallet
+ExamShield
+ExpertFit
+ExpertGPS
+Express Burn
+Express Rip
+Express Scribe
+Express Zip
+ExtendScript Toolkit
+f.lux
+Facebook Messenger
+FactoryTalk AssetCentre
+FactoryTalk Transaction Manager
+FactoryTalk View
+FactoryTalk View Studio
+FactoryTalk ViewPoint
+Fantastical
+Far Manager
+FARO Connect
+Fast Duplicate File Finder
+FastStone Capture
+FastStone ImageViewer
+FastStone Photo Resizer
+FBackup
+Fences
+Fensap-Ice
+Fiddler Everywhere
+Fiery Calibrator
+Figma
+File Viewer Plus
+FileAlyzer
+FileMaker
+FileMenu Tools
+FileOpen Broker
+FileOpen Client
+FileSeek
+FindOnClick
+Firebird SQL
+FIXPERIENCE
+FL Studio
+Flameshot
+Fleet Manager II
+Flexi Soft Designer
+FlexiCapture
+FlexiLayout Studio
+FlexNet Connect
+FlexSim
+FLIR Tools
+Flowgorithm
+FlukeView Forms
+FlukeView Forms Designer
+FlukeView Power Quality Analyzer
+FlukeView ScopeMeter
+FME
+FME Data Inspector
+FME Quick Translator
+FME Workbench
+FoneTool
+FontLab
+Foobar2000
+FortiClient
+FortiClient VPN
+Fotor
+FotoSketcher
+Foxit PhantomPDF
+Free Countdown Timer
+Free Download Manager
+Free Mouse Auto Clicker
+FreeCommander
+FreeWeigh.NET
+FSLogix
+Fuzzy Lookup Add-In for Excel
+FxSound
+GACView
+Garmin Express
+Geekbench
+GenConfig
+Gener8
+Genie Backup Manager
+Genie Timeline
+Geographic Imager
+Geometry-Core
+GeoSetter
+GGU-Trench
+GitExtensions
+Gitkraken
+Glary Utilities
+Global Mapper
+GlobalProtect
+Glxinfo
+GNOME Keyring
+GO Contact Sync
+GoodSync
+GoTo
+GPU-Z
+GrabCAD Print
+Grammarly
+GRASS GIS
+GridVis
+Groundwater Vistas
+gSyncit
+Guardian Browser
+GX Developer
+GX LogViewer
+GX Works
+H2O
+hagercad
+HashMyFiles
+HEVC Video Extension
+HMGWIN
+Hotkey Appendix
+http-ping
+HttpWatch Studio
+Hyena
+IAS Log Viewer
+IBExpert
+ICA SecureStore
+iCareFone Transfer
+iCloud
+iCUE
+Idazki Desktop
+IDEA StatiCa
+IDPhotoStudio
+IE Tab
+IGS-LOG
+IIS Crypto
+iLok License Manager
+ImageGlass
+Images2PDF
+iMazing HEIC Converter
+ImDisk Virtual Disk Driver
+i-Menu
+ImgBurn
+iMyfone D-Back
+IndraSize
+IndraWorks
+influxDB
+Informix Connect
+InfraRecorder
+In-Sight Explorer
+InSSIDer
+Insta360 STUDIO
+InstallShield
+Instant EyeDropper
+InstEd
+InteliMonitor
+IntelliJ IDEA
+InterActual Player
+Intesis MAPS
+IPython
+IQService
+IrfanView
+IRPF
+IRSoft
+I-Scan
+iTunes
+Ivms-4200
+IV-Navigator
+IZYTRON.IQ
+Jabra Direct
+Jabra Motion Office
+Jaltest
+Jamovi
+Java SE
+Java Service Wrapper
+Javelin PDF reader
+Jing
+J-Link
+J-Link Remote Server
+J-Link SWO Viewer
+JMP
+Join.Me
+Joplin
+JPEGView
+JSPrintManager
+JT2Go
+Jupyter Notebook
+Kahoot!
+Kdenlive
+KeePass Password Safe
+KeePassXC
+KensingtonWorks
+KeyTweak
+KiCad
+Kindle for PC
+Kiwi Syslog Server
+Kleopatra
+K-Lite Codec Pack
+Krisp
+LabelLogic
+LabelMark
+LAN Speed Test
+Lansweeper
+LatencyMon
+Latent GOLD
+Leapfrog Geo
+Ledger Live
+Levelogger
+LibreOffice
+LibreOffice Base
+LibreOffice Math
+LibreWolf
+Licence Protector
+Lighthouse for MAX
+LightShot
+LilyPond
+LinkedIn
+LinkManager
+LinuxLive USB Creator
+Listary
+LiteEdit
+LM Studio
+LockDown Browser
+Lockhunter
+LoggerNet
+Logi Bolt
+LOGI Options
+Logitech Presentation
+LogiTune
+LogMeIn
+LogMeIn Ignition
+LogMeTT
+LogMX
+LOGO!Soft Comfort
+LogPlot
+Logstash
+LogTag Analyzer
+LokProgrammer
+Look@LAN
+Loom
+Looperator
+LPILE
+LsAgent
+LS-PrePost
+Lumion
+Lupas Rename
+LycheeSlicer
+Lynis
+MacroWorks
+MadCap Capture
+MadCap Flare
+MadCap Mimic
+Magic Utilities
+Maglr
+Mailbird
+MakeMKV
+Maptitude
+Master Software Tools
+Mathcad
+MATLAB
+Mattermost
+Maxxaudio
+MBSheet
+MCL-Link
+Meazure
+Media Player Morpher
+Media Tagger
+MediaMonkey
+Meeting Owl
+MEGAsync
+Mekko Graphics
+Melodyne
+Memurai
+Mendeley Desktop
+Mergecap
+meshmixer
+Metafile Companion
+MiCOM S1 Agile
+Micro-Cap
+Microsoft Network Speed Test
+MicroWeb
+MIKE C-MAP
+MIKE ECOLab
+MIKE Zero
+MiKTeX
+Mimecast
+MindView
+mintty
+Mission Planner
+Mixxx
+MKVtoolnix
+MobaXterm
+MobiControl
+Mobile Partner
+Mocha AE
+Modern CSV
+MongoDB Compass
+Moodpad
+moomoo
+MOOS Project Viewer
+MOTOTRBO Customer Programming Software
+Mouse Jiggler
+Mouse Recorder
+Movavi SplitMovie
+Movitools Motion Studio
+MPC-HC
+mpv
+MQTT Explorer
+MQTT X
+mRemoteNG
+Multi-Batch
+MultiMon
+MURAL
+MusicBee
+Musicsoft Downloader
+MWSnap
+MxControlCenter
+MyEpson Portal
+MyHarmony
+MySQL Connector/ODBC
+NAPS2
+NaviModel Producer
+NaviModel Viewer
+Neovim
+Nero Burning ROM
+Nero CoverDesigner
+Nero Kwik Media
+Nero MediaHome
+Nero Vision
+Nero WaveEditor
+Nessus Agent
+Net2 Access Control
+NetAdvantage for Windows Forms
+NetStress
+NeuralTools
+Nextcloud
+NexusFont
+NI IO Trace
+Niagara
+NirCmd
+Northern Storage Suite
+novaPDF
+Novapoint
+NPort Administration Suite
+NPort Search Utility
+NST Downloader
+NSwagStudio
+NTFS Permissions Reporter
+NTLite
+NUnit
+NX Studio
+NXLog
+OBS Studio
+Octopus Tentacle
+Odoo
+Office Timeline
+OFS Manager
+Oh My Posh
+ollama
+OmniJoin
+OMNITREND
+OneCommand Manager
+On-premises data gateway
+On-Screen Takeoff
+OnVUE
+OpenedFilesView
+OpenEdge
+Openstudio
+OpenVPN Connect
+OrcaSlicer
+OSFMount
+OST PST Viewer
+Outlook Google Calendar Sync
+ownCloud
+PACTware
+PAExec
+Pageant
+Paint 3D
+Paint.NET Repair
+PANATERM
+pandoc
+Panopto
+Papercut SMTP
+Paperport
+Parsec
+PATLink
+PC400
+PCAN-View
+pCon.planner
+PC-Tool
+PDF Annotator
+PDF Element
+PDF Reader Pro
+PDF reDirect
+PDF24 Creator
+PDF995
+PDFArchitect
+pdfFactory
+PDFill PDF Editor
+PDFTK Builder
+PDF-XChange
+Pegasus Mail
+Perfect Automation
+Perfect DocuReader
+PhantomJS
+Photon OS
+PhotoPad
+PhotoRec
+PhotoScape
+PhraseExpress
+Picasa
+PicoLog
+PicoScope
+PicPick
+Picture Motion Browser
+Picture Style Editor
+PingID
+PingInfoView
+PingPlotter
+Pismo File Mount Audit Package
+Pix4Dmapper
+Pix4Dmatic
+PL/SQL Developer
+Plantronics Hub
+Platnik
+PLAXIS 2D
+PlayMemories Home
+Playwright
+PLCnext Engineer
+Plink
+Polar Flow Sync
+Poly Lens
+PolyEdit
+PowerINSPECT
+PowerShell Studio
+Power-user
+PrecisionTree
+Presto! PageManager
+PrimalForms
+Primavera Risk Analysis
+PrivaZer
+Procore Drive
+ProfiCAD
+Profile Manager
+ProgeCAD
+Programmers File Editor
+Project Plan 365
+ProjectLibre
+ProSheets
+Proton Drive
+PRTG Desktop
+PRTG Enterprise Console
+PRTG Network Monitor
+PrusaSlicer
+PS Remote Play
+PSCP
+PSFTP
+PTGui
+PureBasic
+PureRef
+PV*SOL
+PyCharm
+Pylon Viewer
+Pythagoras
+Qfinder
+QGIS
+QIS
+Qlik Sense Desktop
+QlikView
+QModBus
+QR-Code Font and Encoder
+Qsync
+Quick Terrain Reader
+QuickPar
+QuickTime Player
+Radmin Viewer
+Rapid Recovery
+RarmaRadio
+RawDigger
+Rawshark
+RawTherapee
+Raylectron
+Razer Synapse
+Reader for PC
+RealDownloader
+RealJukebox
+RealPlayer
+Realterm
+RealVNC Server
+RealVNC Viewer
+Reaper
+Recovery Toolbox for Outlook
+Reflection FTP Client
+RegioGraph
+ReiBoot
+Reliability Workbench
+ReluxDesktop
+ReluxEnergyCH
+reMarkable
+Remo Recover
+Remote Control Viewer
+Remote Desktop Connection
+Remote Desktop Manager
+Remote Support Jump Client
+RemoteDesktopManagerFree
+ReMouse
+Rename Master
+RenderDoc
+Reordercap
+Resilio Sync
+ResourcesExtract
+RFGen
+RheoCompass
+Rhinoceros
+RingCentral
+RingCentral Meetings
+RISKOptimizer
+Robo 3T
+RockWorks
+Rosetta Stone
+ROUVY
+RSData
+RSTAB
+RStudio
+Rtools
+Rulefinder
+RustDesk
+S3 Browser
+Safran Project
+Safran Risk
+SAP Analytics (Cloud)
+SAP BusinessObjects BI Platform
+SAP Console
+SAP Data Services
+SAP2000
+SAS/GRAPH
+Save to Video
+Scan2Text
+ScanSnap Manager
+ScanSnap Organizer
+SCENE
+Scia Engineer
+ScreenHunter
+Screenpresso
+ScreenRuler
+ScreenToGif
+SCS Data Manager
+Second Copy
+SecSigner
+SectionMaker
+Secure Login Client
+SecureCRT
+Sentinel RMS License Manager
+Sentinel Secure
+Serv-U
+SetPoint
+SFT 2841
+ShareX
+Sharp World Clock
+SharpDevelop
+SharpKeys
+Shop for HP Supplies
+SHOTPlus
+Shrew Soft VPN Client
+SigmaNEST
+SigmaXL
+SignLab
+SignMax
+SIGRA
+Silhouette Studio
+SilverFast
+SIMARIS Suite
+SIMATIC ProSave
+SIMATIC Step 7
+SIMATIC WinCC
+SIMATIC WinCC flexible
+SIMATIC WinCC flexible Simulator
+SimLab Composer
+Simple Sticky Notes
+SiriL
+SiteScope
+SIwave
+SketchUp Import
+Sketchup Viewer
+Skype
+Skype Room Systems
+Slido
+Slimjet
+SMART Board
+SMART Ink
+Smart Label Printer
+Smart Meeting Pro
+SMART Notebook
+SMART Product Drivers
+SmartAssembly
+SmartExporter
+SmartGraph
+SmartPSS
+Smartsheet
+SnapDownloader
+Snipaste
+SNMP Tester
+SnmpWalk
+Snow Inventory
+SOAP Toolkit
+SoapUI
+Software Informer
+Solid Edge
+SolidLink
+SolidNetWork License Manager
+SolidWorks Composer Player
+SolidWorks eDrawings
+SolidWorks Explorer
+SolidWorks Flow Simulation
+SOLIDWORKS Manage
+SolidWorks Plastics
+SoMove
+Sonos
+Sophos Endpoint Defense
+Sound Organizer
+SourceTree
+SpaceSniffer
+SpatialAnalyzer
+Spatix
+SPEOS
+Splashtop Streamer
+SQL Backup
+SQL Change Automation
+SQL Data Generator
+SQL Dependency Tracker
+SQL Developer Bundle
+SQL Doc
+SQL Multi Script
+SQL Prompt
+SQL Search
+SQL Snapper
+SQL Source Control
+SQL Test
+SQL XEvent Profiler
+SQLite Expert
+SquirrelView
+SSIS Integration Toolkit for Directory Services
+SSIS Integration Toolkit for Microsoft Dynamics 365
+SSIS Integration Toolkit for Microsoft Project Server
+SSIS Integration Toolkit for Microsoft SharePoint
+SSIS Integration Toolkit for Team Foundation Server
+SSIS Productivity Pack
+SSMS Integration Pack
+Star IPS
+STARLIMS
+StarUML
+StatTools
+SteadyMouse
+SteamVR
+STM32CubeProgrammer
+StoneC
+STP Viewer
+Studio 3T
+Sublime Text
+Sumatra PDF
+Sunny Explorer
+SUPERHUMAN
+SuperOrca
+SuperPutty
+Surfshark
+Surveillance Station Client
+SvanPC
+SWIFT Token Client
+Sybase PowerDesigner
+SyncBackFree
+SyncToy
+T1V
+Tableau Public
+Tableau Reader
+TabletSync
+Tacx Training
+Tailscale
+TBarCode
+Tclkit
+TeighaX
+Tekla Structures
+Tekla Warehouse
+Temple
+Tencent Meeting
+TeraBox
+TeraCopy
+TerraExplorer
+Terramodel
+Tesseract
+TestDisk
+TestReach
+Texmaker
+TextPad
+THERM
+think-cell
+Thonny
+Threema
+Thunderbird
+TIA Administrator
+TIA Portal Project Server
+Tiamo
+TigerVNC
+Tinytag Explorer
+Toad Data Modeler
+Toad Data Point
+Todoist
+Toolbook
+TopRank
+Tor
+Tor Browser
+TOSCA Commander
+TOSCA Testsuite
+Total Commander
+Totally Integrated Automation Portal
+TouchCopy
+TranslucentTB
+TreeComp
+TreePad
+TreeSize
+Trezor Suite
+Trimble Connect
+Trimble Data Transfer
+Truecrypt
+TunnelBear
+Typing Master
+Ubisoft Connect
+UC Browser
+u-center
+uEye
+UltData
+UltraCompare
+UltraEdit
+UltraISO
+UltraMon
+UltraSearch
+Ultravnc
+Umbrella Roaming Client
+Unified Functional Testing
+UniFLOW SmartClient
+Unity Hub
+UniversalDevicePoller
+Unreal Datasmith Exporter for 3ds Max
+Unreal Datasmith Exporter for Revit
+UpNote
+USBDeview
+VACON Live
+vacuumlo
+ValSuite
+VB Decompiler
+VB-CABLE
+VCDS
+Veeam Agent
+Veeam Availability Suite
+Veeam Explorer for Microsoft SharePoint
+Veeam ONE
+Vensim
+VeriSens Application Suite
+Veta
+viagraph
+Viber
+VideoPad Video Editor
+VidyoConnect
+View Pro
+VIRB Edit
+Virtual Serial Ports Emulator
+Visual Studio Build Tools
+Vivaldi Browser
+VNCViewer
+Voicemeeter
+VooV Meeting
+V-Ray for 3ds Max
+V-Ray for SketchUp
+VSDC Free Screen Recorder
+VSDC Free Video Editor
+VSee
+VShell Server
+VSPlayer
+VueScan
+Vysor
+WD Discovery
+WD Security
+Weak Password Test
+WeatherLink
+Webcam Surveyor
+WebCatalog
+WebClientPrint for ASP.NET
+WebEx Meeting Center
+WebEx Meetings
+WebEx One-Click
+WebEx Productivity Tools
+Webex Teams
+WebMatrix
+WeChat
+WezTerm
+WhatPulse
+WhatsApp
+WibuKey Runtime
+Winaero Tweaker
+WinCCViewerRT
+WinDev Mobile
+Windhawk
+Windows
+Windows Admin Center
+Windows Assessment and Deployment Kit
+Windows Camera
+Windows Commander
+Windows DVD Maker
+Windows Live Movie Maker
+Windows Live Photo Gallery
+Windows Media Player
+Windows Mobile Device Center
+Windows PowerShell
+Windows SharePoint Services
+Windows Storage Server
+Windows Subsystem for Linux (WSL)
+WindPro
+WinGUp
+Winmail Opener
+Win-Situ
+WinSplit Revolution
+WinSQL
+winTest Analysis
+WinTopo
+WinTotal
+Wireless Switch Utility
+Wise Memory Optimizer
+Wisenet Device Manager
+WISO Steuer
+WizTree
+wootility
+WorkFlowy
+Worksharing Monitor for Autodesk Revit
+WPS Office
+WPS Presentation
+WPS Spreadsheets
+WPS Writer
+Xbox
+XLSTAT
+XMedia Recode
+XML Notepad
+XMLPad
+XMLSAT++
+XnView
+XnView MP
+Xrev Transmit
+XYZWare
+yEd Graph Editor
+Yousician
+Youtube Downloader HD
+yubikey personalization tool
+Zabbix
+ZBar
+Z-Cron
+ZDServer
+ZebraDesigner
+Zeplin
+ZeroTier One
+Zetadocs PDF
+Zetasizer
+ZIP Reader
+Zoho Assist
+ZombieKiller
+Zoom Meetings
+Zscaler
+ZyDesk
