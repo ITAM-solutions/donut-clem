@@ -49,3 +49,7 @@ class FieldType(str, Enum):
     PaymentMethod = 'paymentMethod'
     Index = 'index'
     UUID = 'uuid'
+    Street = 'street'
+    City = 'city'
+    Country = 'country'
+    PostalCode = 'postalCode'

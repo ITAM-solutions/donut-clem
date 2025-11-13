@@ -341,6 +341,22 @@ def get_index(config: DocxConfig, idx, **kwargs):
     return str(idx)
 
 
+def get_street(config: DocxConfig, **kwargs):
+    return config.faker.address()
+
+
+def get_city(config: DocxConfig, **kwargs):
+    return config.faker.city()
+
+
+def get_country(config: DocxConfig, **kwargs):
+    return config.faker.country()
+
+
+def get_postal_code(config: DocxConfig, **kwargs):
+    return config.faker.postalcode()
+
+
 """ IMPORTANT: Do not declare any getter function after this line """
 # sys.modules[__name__] gets a reference to the current module.
 _REGISTRY = collect_funcs_from_module(sys.modules[__name__], suffix="get", default=lambda: print("Random generic data"))

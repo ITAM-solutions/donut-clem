@@ -35,6 +35,24 @@ def gen_addr_inline(config: DocxConfig, **kwargs):
         "type": "text"
     }
 
+
+def gen_addr_form(config: DocxConfig, **kwargs):
+    # return f'{config.faker.address()}\n{config.faker.city()}, {config.faker.country()}'
+    data = {
+        f_id: {
+            'lbl': helpers.normalize_string(random.choice(labels), FieldType.Text, 0.0, config),
+            'val': helpers.normalize_string(value_generators.generate_value(dtype, config), dtype, 0.0, config)
+        }
+        for f_id, (dtype, labels) in word_bank.ADDRESS_FORM_FIELDS.items()
+    }
+
+    return {
+        "raw": data,
+        "type": "kv",
+    }
+
+
+
 def gen_doc_ids(config: DocxConfig, **kwargs):
     data = {
         f_id: {

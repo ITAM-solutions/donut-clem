@@ -409,6 +409,7 @@ PRODUCT_FIELD_GROUPS_SPECIAL = {
     "021": ("idx", "sku", "name", "qty", "dfrom", "dto", "tax_amount", "disc_amount", "unpr", "totpr", "serial", "tax_rate"),
     "022": ("sku", "name", "qty", "dfrom", "dto", "desc", "desc_short", "deal_type", "tax_rate", "met"),
     "024": ("name", "met", "metgr", "qty", "subscription_period", "unpr", "totpr", "disc_rate", "disc_amount", "tax_rate", "tax_amount", "bonus_amount", "subtotal", "deal_type"),
+    "026": ("name", "qty", "met", "unpr", "tax_amount", "totpr"),
 }
 
 CONTACT_INFO_FIELDS = {
@@ -444,6 +445,13 @@ DOCUMENT_IDS = {
     'transaction': (FieldType.IDHuge, ('TxID', 'Ref. ID', 'Reference ID', 'Operation ID')),
     'signature': (FieldType.UUID, ('Signature ID', 'Sign. ID', 'SigCode', 'eSign ID', 'ID')),
     'license': (FieldType.IDLong, ('License', 'License Key', 'License Number', 'License ID', 'Activation Key')),
+}
+
+ADDRESS_FORM_FIELDS = {
+    'street': (FieldType.Street, ('Address', 'Street')),
+    'city': (FieldType.City, ('City', )),
+    'country': (FieldType.Country, ('Country',)),
+    'postal_code': (FieldType.PostalCode, ('Postal Code',),)
 }
 
 """ FORMAT: id: [possible_values]"""
