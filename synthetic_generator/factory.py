@@ -127,6 +127,7 @@ class GeneratorFactory:
             raw_content = [f for f in raw_data.values() if f['val'] != ' ']
             table_data = [f"{f['lbl']}: {f['val']}" for f in rich_fields.values()]
             as_text = "\n".join([f"{i['lbl']}: {i['val']}" for i in raw_content])
+            as_text_inline = ". ".join([i['val'] for i in raw_content]).replace("\n", " ")
             return {
                 "data": rich_content,
                 "f": rich_fields,
@@ -135,6 +136,7 @@ class GeneratorFactory:
                 "raw": raw_content,
                 "raw_all": raw_content_all,
                 "as_text": as_text,
+                "as_text_inline": as_text_inline,
             }
         elif type_ == "table":
             num_cols = len(data['raw']['labels'])

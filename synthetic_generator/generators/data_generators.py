@@ -301,6 +301,20 @@ def gen_pr_date_to(config: DocxConfig, **kwargs):
     }
 
 
+def gen_pr_unpr(config: DocxConfig, **kwargs):
+    return {
+        "raw": value_generators.generate_value(FieldType.Price, config),
+        "type": "text"
+    }
+
+
+def gen_pr_totpr(config: DocxConfig, **kwargs):
+    return {
+        "raw": value_generators.generate_value(FieldType.Price, config),
+        "type": "text"
+    }
+
+
 def gen_signature(config: DocxConfig, blank_probability: float = None, **kwargs):
     """ signature: kv
 
@@ -433,6 +447,26 @@ def gen_text_prose(config: DocxConfig, quantity: int, **kwargs):
     return {
         "raw": prose,
         "type": "text"
+    }
+
+def gen_text_paragraphs(config: DocxConfig, quantity: int, **kwargs):
+    """
+
+    :param config:
+    :param quantity:
+    :param kwargs:
+    :return:
+    """
+    data = '\n\n'.join(
+        [
+            '. '.join([s.capitalize() for s in _get_text(random.randint(3, 8), config.lang)])
+            for _ in range(quantity)
+        ]
+    )
+
+    return {
+        "raw": data,
+        "type": "text",
     }
 
 

@@ -226,6 +226,8 @@ class SyntheticDataGenerator:
             ('prDateFrom', 'dfrom'),
             ('prDateTo', 'dto'),
             ('prQty', 'qty'),
+            ('prUnpr', 'unpr'),
+            ('prTotpr', 'totpr')
         ]
 
         for generator, key in shared_product_field_generators:
@@ -326,7 +328,7 @@ if __name__ == '__main__':
     # output_folder = Path(r"output")
     # # output_path =  Path(fr'../synthetic_data/templates/tests/outputs/{template_name}.docx')
 
-    template_path = Path(fr"templates/multitables/template_021_001.docx")
+    template_path = Path(fr"templates/specialcases/template_022_000.docx")
     # template_path = Path(fr"templates/special/template_017_000.docx")
 
     output_folder = Path(r"output")

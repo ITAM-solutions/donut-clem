@@ -183,8 +183,11 @@ def get_product_desc_short(config: DocxConfig, **kwargs) -> str:
 
 
 def get_product_desc(config: DocxConfig, **kwargs) -> str:
-    product_desc = ' '.join(config.faker.words(nb=random.randint(7, 15)))
+    product_desc = '\n'.join(
+        ['- ' + ' '.join(config.faker.words(nb=random.randint(7, 15))) for _ in range(random.randint(3, 6))]
+    )
     return product_desc
+
 
 def get_short_text(config: DocxConfig, **kwargs) -> str:
     return "sample_short_text"
