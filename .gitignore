@@ -148,3 +148,6 @@ dataset
 
 # Results
 weights
+
+# Synthetic generator
+synthetic_generator/output

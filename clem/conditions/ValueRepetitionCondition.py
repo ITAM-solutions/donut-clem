@@ -64,7 +64,7 @@ class ValueRepetitionCondition(StrongCondition):
             if best_unique_candidate.is_none:
                 proportion = empty_values_count / total_num_candidates
             else:
-                proportion = num_reps / total_non_empty_candidates
+                proportion = num_reps / total_non_empty_candidates if total_non_empty_candidates else 0
 
             weight = cls.weight * proportion  # noqa
             best_unique_candidate.update_score(weight, cls.name)

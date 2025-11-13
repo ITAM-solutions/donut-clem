@@ -131,7 +131,7 @@ class DonutCLEM:
             print("WARNING: Schema validation error. Splitting image in 2")
             if divisions < self.max_im_divisions:
                 # Save sub-images to temporary directory.
-                sub_ims = self._split_image_in_half(im_path)
+                sub_ims = self.split_image_in_half(im_path)
                 for idx, sub_im in enumerate(sub_ims):
                     sections = metadata.get('sections', [])
                     sections.append(idx)
@@ -140,6 +140,23 @@ class DonutCLEM:
                     self.predict(sub_im, output=output, divisions = divisions+1, **metadata)
             else:  # Max iteration depth reached. Could not extract data. Returning empty prediction with error status.
                 output.add(get_empty_prediction(raised_error=True), metadata)
+
+    def exceeds_output_limit(self, sample_json, proposed_limit: int = None) -> Tuple[bool, int]:
+        """
+        Use this method to determine if a certain JSON exceeds the model's output limit. Specially useful to determine
+        if your ground-truth samples fit the model's limits.
+
+        :param sample_json:
+        :param proposed_limit:
+        :return:
+        """
+        max_output_limit = proposed_limit if proposed_limit else self.model.config.max_length
+
+        tokens_string = self.model.json2token(sample_json)
+        tokens = self.model.decoder.tokenizer(tokens_string)
+        num_tokens = len(tokens['input_ids'])
+        limit_exceeded = num_tokens > max_output_limit
+        return limit_exceeded, num_tokens
 
     def _inference(self, im_path: Image) -> PredictionSchema:
         """
@@ -151,12 +168,13 @@ class DonutCLEM:
         :return: model's output formatted as a PredictionSchema instance.
         """
         im = Image.open(im_path)
-        output_raw = self.model.inference(image=im, prompt=self.prompt)["predictions"][0]
+        output = self.model.inference(image=im, prompt=self.prompt)
+        output_raw = output["predictions"][0]
         output = PredictionSchema(**output_raw)
         return output
 
     @staticmethod
-    def _split_image_in_half(im_path: Path) -> List[Path]:
+    def split_image_in_half(im_path: Path) -> List[Path]:
         """
         Utility method that divides an image in half, and saves both halves at the same directory as the original image.
         Please note that the destination directory is expected to be temporary, and will be removed at some point
@@ -236,7 +254,7 @@ if __name__ == '__main__':
     # print(output)
 
     # Test with full document
-    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Text\abigail_02.pdf_002.png")
+    DOCUMENT_PATH = Path(r"C:\Users\FranMoreno\ITAM_software\repositories\donut-clem\dataset\evaluation\samples\Standard\abigail_03.pdf_000.png")
     donut = DonutCLEM(MODEL_PATH)
 
     donut.predict_document(DOCUMENT_PATH)
