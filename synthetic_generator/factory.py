@@ -117,10 +117,11 @@ class GeneratorFactory:
 
             rich_fields = {
                 f_id: {
+                    "idx": as_rich(str(idx), self._base_config, font_size),
                     "lbl": as_rich(f["lbl"], self._base_config, font_size),
                     "val": as_rich(f["val"], self._base_config, font_size),
                     "empty": f["val"] == ' '
-                } for f_id, f in raw_data.items()
+                } for idx, (f_id, f) in enumerate(raw_data.items())
             }
             rich_content = [f for f in rich_fields.values() if not f["empty"]]
             raw_content_all = [f for f in raw_data.values()]
