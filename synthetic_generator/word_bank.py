@@ -410,6 +410,9 @@ PRODUCT_FIELD_GROUPS_SPECIAL = {
     "022": ("sku", "name", "qty", "dfrom", "dto", "desc", "desc_short", "deal_type", "tax_rate", "met"),
     "024": ("name", "met", "metgr", "qty", "subscription_period", "unpr", "totpr", "disc_rate", "disc_amount", "tax_rate", "tax_amount", "bonus_amount", "subtotal", "deal_type"),
     "026": ("name", "qty", "met", "unpr", "tax_amount", "totpr"),
+    "028": ("name", "dfrom", "dto", "totpr", "disc_rate"),
+    "029": ("name", "dfrom", "dto", "unpr", "totpr", "desc", "serial", "sku", "qty"),
+    "031": ("name", "subscription_period", "unpr", "totpr", "qty"),
 }
 
 CONTACT_INFO_FIELDS = {

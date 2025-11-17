@@ -35,6 +35,12 @@ def gen_addr_inline(config: DocxConfig, **kwargs):
         "type": "text"
     }
 
+def gen_url(config: DocxConfig, **kwargs):
+    return {
+        "raw": value_generators.generate_value(FieldType.Url, config),
+        "type": "text"
+    }
+
 
 def gen_addr_form(config: DocxConfig, **kwargs):
     # return f'{config.faker.address()}\n{config.faker.city()}, {config.faker.country()}'
@@ -122,7 +128,7 @@ def _generate_additional_invoice_fields(config: DocxConfig, qty: int = None):
 
         selected_fields[field_id] = (
             helpers.normalize_string(value_generators.generate_value(datatype=dtype, config=config),
-                dtype, 0.3, config),
+                dtype, 0.15, config),
             helpers.normalize_string(selected_tag, FieldType.Text, 0.0, config)
         )
 

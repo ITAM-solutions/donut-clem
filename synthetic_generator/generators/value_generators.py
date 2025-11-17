@@ -357,6 +357,10 @@ def get_postal_code(config: DocxConfig, **kwargs):
     return config.faker.postalcode()
 
 
+def get_url(config: DocxConfig, **kwargs):
+    return config.faker.url()
+
+
 """ IMPORTANT: Do not declare any getter function after this line """
 # sys.modules[__name__] gets a reference to the current module.
 _REGISTRY = collect_funcs_from_module(sys.modules[__name__], suffix="get", default=lambda: print("Random generic data"))

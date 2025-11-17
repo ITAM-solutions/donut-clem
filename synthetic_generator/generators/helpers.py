@@ -83,7 +83,8 @@ def normalize_string(value: str, dtype: FieldType, is_blank_p: float, config: Do
         FieldType.Street,
         FieldType.City,
         FieldType.Country,
-        FieldType.PostalCode
+        FieldType.PostalCode,
+        FieldType.Url,
         # Keep expanding if FieldType is updated with new types.
     ):
         value = translate(value, config.lang)

@@ -53,3 +53,4 @@ class FieldType(str, Enum):
     City = 'city'
     Country = 'country'
     PostalCode = 'postalCode'
+    Url = 'url'
