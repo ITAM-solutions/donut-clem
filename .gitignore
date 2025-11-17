@@ -151,4 +151,4 @@ weights
 
 # Synthetic generator
 synthetic_generator/output
-synthetic_generator/data/images/*/samples
+synthetic_generator/data/images/**/samples
