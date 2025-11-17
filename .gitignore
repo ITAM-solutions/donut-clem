@@ -151,4 +151,6 @@ weights
 
 # Synthetic generator
 synthetic_generator/output
-synthetic_generator/data/images/**/samples
+synthetic_generator/data/images/class_01/samples/**
+synthetic_generator/data/images/class_02/samples/**
+synthetic_generator/data/images/class_03/samples/**
