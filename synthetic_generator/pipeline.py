@@ -13,6 +13,7 @@ import json
 import pymupdf
 import io
 from copy import deepcopy
+import traceback
 
 from typing import List, Union, Dict, Tuple
 from docxtpl import DocxTemplate
@@ -24,6 +25,10 @@ from synthetic_generator.template_parser import JinjaCustomParser
 from clem.model import DonutCLEM
 
 IMS_PATH = Path(r'data/images')
+
+
+class GenerationException(Exception):
+    pass
 
 
 class SyntheticDataGenerator:
@@ -47,15 +52,22 @@ class SyntheticDataGenerator:
         self.root_info = {}  # To contain all raw data so it is not generated twice if already exists.
         self.gt_data = {}  # To be later converted to JSON.
 
+        self._existing_shared_product_fields = list()
+
     def generate(self):
         """
         # TODO: fill
 
         :return:
         """
-        self.populate_images()
-        self.populate_template()
-        self.save()
+        try:
+            self.populate_images()
+            self.populate_template()
+            self.save()
+        except Exception:
+            print(traceback.format_exc())
+            raise GenerationException()
+
 
     def populate_images(self):
         """
@@ -146,7 +158,11 @@ class SyntheticDataGenerator:
 
         # Convert to PDF and save PDF
         pdf_file = sample_base_name.with_suffix('.pdf')
-        docx2pdf.convert(docx_file, pdf_file)
+        try:
+            docx2pdf.convert(docx_file, pdf_file)
+        except Exception as e:
+            print("WARNING!!! Error while saving sample. Skipping.")
+            return
 
         # Convert to Image, save image
         with pymupdf.open(pdf_file) as pdf_obj:
@@ -168,8 +184,8 @@ class SyntheticDataGenerator:
                         json.dump(partial_gt, f, indent=4, ensure_ascii=False)  # noqa
 
         # DOCX and PDF not needed anymore
-        # os.remove(docx_file)
-        # os.remove(pdf_file)
+        os.remove(docx_file)
+        os.remove(pdf_file)
 
     def generate_samples_from_page(self, page, clip_heights: Tuple[int, int] = (0, 4), generated_samples: List = None):
         if generated_samples is None:
@@ -179,7 +195,7 @@ class SyntheticDataGenerator:
         hmin, hmax = clip_heights
         clip = pymupdf.Rect(0, h * hmin // 4, w, h * hmax // 4)
 
-        actual_gt_data = self._cleanup_gt_data(page, clip, self.factory.expected_product_fields)
+        actual_gt_data = self._cleanup_gt_data(page, clip, self.factory.expected_product_fields, self._existing_shared_product_fields)
         limit_exceeded, tokens_count = self.model.exceeds_output_limit(actual_gt_data, self.model_output_limit)
 
         if limit_exceeded and ((hmax - hmin) // 2) > 0:  # Jump to next division until we get to quarters
@@ -195,26 +211,6 @@ class SyntheticDataGenerator:
             pixmap = page.get_pixmap(dpi=200, clip=clip)
             generated_samples.append((pixmap, actual_gt_data, tokens_count))
             return generated_samples
-
-
-    """
-    def foo(page, heights: List[int, int] = [0, 4]):
-        w, h = page.rect.width, page.rect.height
-        hmin, hmax = heights
-        clip = pymupdf.Rect(0, h * (hmin // h), w, h * (hmax // h))
-        text = get_text(page, clip)
-        limit_exceeded = clean_gt(current_gt, text)
-        if limit_exceeded and (hmax // 2) > 0: # Jump to next division if possible.
-            heights_halves = [
-                (hmin, hmax // 2),
-                (hmax // 2, hmax),
-            ]
-            for new_heights in heights_halves:
-                foo(page, new_heights)
-        else:
-            # Save the corresponding image portion with its gt json.
-    """
-
 
     def _add_products_shared_data(self):
         if not self.gt_data.get('products'):
@@ -232,24 +228,52 @@ class SyntheticDataGenerator:
 
         for generator, key in shared_product_field_generators:
             if self.context.get(generator):
+                self._existing_shared_product_fields.append(key)
                 for product in self.gt_data['products']:
                     product[key] = self.context[generator]['text']
 
 
-    def _cleanup_gt_data(self, page, clip, expected_product_fields: List[str]):
-        print(f"Expected product fields:\n{', '.join(expected_product_fields)}")
+    def _cleanup_gt_data(self, page, clip, expected_product_fields: List[str], shared_product_fields: List[str]):
+        # print(f"Expected product fields:\n{', '.join(expected_product_fields)}")
         text_in_page = page.get_text("text", clip=clip).replace('\n', '').replace(' ', '').lower()
+        text_in_page = '' if not text_in_page else text_in_page
 
         gt_data_page = deepcopy(self.gt_data)
 
         for gt_key, val in gt_data_page.items():
             if gt_key == "products":
-                incomplete_products = []
-                for idx, product in enumerate(gt_data_page['products']):
-                    for field_name, field_val in product.items():
-                        clean_val = field_val.replace(' ', '').lower() if field_val is not None else None
-                        if not clean_val or clean_val not in text_in_page:
-                            product[field_name] = None
+
+                gt_data_page['products'] = self._clean_non_included_products(
+                    deepcopy(gt_data_page['products']),
+                    text_in_page,
+                    self._existing_shared_product_fields
+                )
+
+                # # To check if values are repeated
+                # vals = {k: [pr[k] for pr in gt_data_page['products']] for k in gt_data_page['products'][0]}
+                #
+                # for idx, product in enumerate(gt_data_page['products']):
+                #     for field_name, field_val in product.items():
+                #         clean_val = field_val.replace(' ', '').lower() if field_val is not None else None
+                #
+                #         in_page = not (clean_val == '' or clean_val is None) and clean_val in text_in_page
+                #         repeated = clean_val in vals[field_name][:idx] + vals[field_name][idx+1:]
+                #         shared = field_name in self._existing_shared_product_fields
+                #
+                #         if not in_page:
+                #             product[field_name] = None
+                #         else:
+                #             if repeated and not shared:
+                #                 product[field_name] = None
+
+
+                    # for field_name, field_val in product.items():
+                    #     clean_val = field_val.replace(' ', '').lower() if field_val is not None else None
+                    #     if not clean_val or clean_val not in text_in_page:
+                    #         product[field_name] = None
+                    #     else: # Make sure it is not a false positive
+                    #         # Check if field_name is a shared_product_field
+                    #         pass
 
                     # for expected_key in expected_product_fields:
                     #     val = product.get(expected_key, '').replace(' ', '').lower()
@@ -317,6 +341,53 @@ class SyntheticDataGenerator:
         existing_indexes = [int(file_.stem.split('_')[-1].split('-')[0]) for file_ in template_output_path.glob('*.png')]
         return max(existing_indexes) + 1 if existing_indexes else 0
 
+    @staticmethod
+    def _clean_non_included_products(
+            products: List[Dict],
+            text_in_page: str,
+            shared_product_fields: List[str]
+    ) -> List[dict]:
+        """
+        Checks if there are products in the given list that don't exist in the current sample,
+        and returns curated list containing just products that actually exist in the sample.
+
+        :param products: full list of products for this sample
+        :return: legit products (products that actually exist in this sample).
+        """
+        # To check if values are repeated
+        # vals = {k: [pr[k].replace(' ', '').lower() if pr[k] else None for pr in products] for k in products[0]}
+        legit_products = set()
+        for idx, product in enumerate(products):
+            # Check each field, raise flag if non-legit values found, instead of removing values
+
+            flags = {field_name: {'legit': False, 'repeated': False, 'shared': False} for field_name in product}
+            for field_name, field_val in product.items():
+                clean_val = field_val.replace(' ', '').lower() if field_val is not None else None
+
+                in_page = not (clean_val == '' or clean_val is None) and clean_val in text_in_page
+                clean_val_str = clean_val if clean_val else ''
+                repeated = text_in_page.count(clean_val_str) > 1
+                shared = field_name in shared_product_fields
+
+                if not in_page:
+                    product[field_name] = None
+
+                flags[field_name]['legit'] = in_page
+                flags[field_name]['repeated'] = repeated
+                flags[field_name]['shared'] = shared
+
+            legit_fields = {fname: f_flags for fname, f_flags in flags.items() if f_flags['legit']}
+            any_truly_legit = any(
+                [not legit_fields[fname]['repeated'] and not legit_fields[fname]['shared']
+                    for fname in legit_fields]
+            )
+            if any_truly_legit:
+                legit_products.add(idx)
+
+        # Remove every product that was flagged in the previous step
+        return [product for idx, product in enumerate(products) if idx in legit_products]
+
+
 if __name__ == '__main__':
     # file_name = 'footer_error'
     # template_path = Path(fr'../synthetic_data/templates/tests/{file_name}.docx')
@@ -328,7 +399,7 @@ if __name__ == '__main__':
     # output_folder = Path(r"output")
     # # output_path =  Path(fr'../synthetic_data/templates/tests/outputs/{template_name}.docx')
 
-    template_path = Path(fr"templates/specialcases/template_022_000.docx")
+    template_path = Path(fr"templates/standard/template_031_000.docx")
     # template_path = Path(fr"templates/special/template_017_000.docx")
 
     output_folder = Path(r"output")

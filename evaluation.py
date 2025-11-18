@@ -23,8 +23,10 @@ from typing import List
 import json
 import numpy as np
 from datetime import datetime
-
+from pydantic import ValidationError
 import evaluation.prediction_cleaning as pr_cleaning
+from clem.donut_clem import DonutCLEM, ModelState
+from clem.output_schema import PredictionSchema, get_empty_prediction
 
 
 @dataclass
@@ -89,9 +91,11 @@ class Evaluator:
                 with open(sample_gt_path, 'r', encoding='utf-8') as fp:
                     sample_gt = json.load(fp)
 
-                sample_gt = self._sanitize_output(sample_gt, sample_im_path)
+                sample_gt = self._normalize_prediction(sample_gt, sample_im_path)
+                # sample_gt = self._sanitize_output(sample_gt, sample_im_path)
 
-                pred = self._compute_inference(model, sample_im_path)
+                pred = model.predict(sample_im_path)[0]
+                # pred = self._compute_inference(model, sample_im_path)
 
                 metrics = self._compute_evaluation_metrics(sample_gt, pred)
                 if self._check_if_low_accuracy(metrics):
@@ -123,7 +127,7 @@ class Evaluator:
         for sample in self.low_accuracy_samples:
             shutil.copy(sample, low_accuracy_samples_path / sample.name)
 
-    def _compute_evaluation_metrics(self, gt: dict, pr: dict) -> Metrics:
+    def _compute_evaluation_metrics(self, gt: PredictionSchema, pr: PredictionSchema) -> Metrics:
         return Metrics(
             tree_acc=self._compute_tree_acc(gt, pr),
             product_hit=self._compute_products_hit_acc(gt, pr),
@@ -137,9 +141,7 @@ class Evaluator:
             metrics.product_hit <= 0.5 or \
             metrics.matches <= 0.3
 
-
-
-    def _compute_tree_acc(self, gt: dict, pr: dict) -> float:
+    def _compute_tree_acc(self, gt: PredictionSchema, pr: PredictionSchema) -> float:
         """
         Score based on the JSON structure. Measures how good the model is in reproducing
         the expected data structure.
@@ -163,7 +165,6 @@ class Evaluator:
             for k, values in data_prepared.get('products', {}).items()
         }
         return data_prepared
-
 
     @staticmethod
     def _compute_products_hit_acc(gt: dict, pr: dict) -> float:
@@ -233,6 +234,15 @@ class Evaluator:
 
         matches_ratio = total_matches_count / total_values_count
         return matches_ratio
+
+    def _normalize_prediction(self, data: dict, im_path: Path) -> PredictionSchema:
+        try:
+            prediction = PredictionSchema.model_validate_json(json.dumps(data))
+        except ValidationError:
+            print(f"Warning: sample {im_path} prediction cannot be normalized. Interpreting as empty response.")
+            self.samples_with_broken_outputs.append(im_path)
+            prediction = get_empty_prediction(raised_error=True)
+        return prediction
 
     def _sanitize_output(self, data: dict, im_path: Path) -> dict:
         try:
@@ -333,9 +343,11 @@ class Evaluator:
             sample_gt = json.load(fp)
 
         # Normalize GT format
-        sample_gt = self._sanitize_output(sample_gt, sample_im_path)
+        sample_gt = self._normalize_prediction(sample_gt, sample_im_path)
+        # sample_gt = self._sanitize_output(sample_gt, sample_im_path)
 
-        pred = self._compute_inference(model, sample_im_path)
+        pred = model.predict(sample_im_path)[0]
+        # pred = self._compute_inference(model, sample_im_path)
         print(pred)  # To visualize if output makes sense
 
         metrics = self._compute_evaluation_metrics(sample_gt, pred)
@@ -355,8 +367,9 @@ class Evaluator:
                                 "If you want to remove them, set 'clean_previous_results = true'.")
 
     @staticmethod
-    def _load_donut(model_path: Path):
-        return DonutModel.from_pretrained(model_path)
+    def _load_donut(model_path: Path) -> DonutCLEM:
+        return DonutCLEM(model_path, mode=ModelState.EVALUATION)
+        # return DonutModel.from_pretrained(model_path)
         # return DonutModel.from_pretrained(os.getenv("HF_REPO_NAME"), use_auth_token=os.getenv("HF_TOKEN"))
 
     @staticmethod

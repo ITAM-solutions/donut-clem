@@ -464,8 +464,8 @@ ADDRESS_FORM_FIELDS = {
 """ (value,  probability) """
 
 LANGUAGES = (
-    ('en_US', 1.0),
-    # ('nl_NL', 0.3)
+    ('en_US', 0.7),
+    ('nl_NL', 0.3)
 )
 
 COLOR_PALETTES = [

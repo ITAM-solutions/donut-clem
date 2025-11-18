@@ -354,7 +354,13 @@ def get_country(config: DocxConfig, **kwargs):
 
 
 def get_postal_code(config: DocxConfig, **kwargs):
-    return config.faker.postalcode()
+    try:
+        return config.faker.postalcode()
+    except AttributeError:
+        try:
+            return config.faker.postal_code()
+        except AttributeError:
+            return 'ABCD123'
 
 
 def get_url(config: DocxConfig, **kwargs):

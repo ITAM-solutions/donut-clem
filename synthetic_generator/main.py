@@ -5,15 +5,23 @@ Last Updated: 9/24/2025
 Version: 1.0
 Description: TOFILL
 """
-import random
+import os
 
 from pathlib import Path
 from datetime import datetime
-from tqdm import tqdm
 from collections import defaultdict
 
-from pipeline import SyntheticDataGenerator
+from pipeline import SyntheticDataGenerator, GenerationException
 from typing import Dict, List
+
+
+def end_alert():
+    import winsound
+    winsound.Beep(frequency=800, duration=400)
+    winsound.Beep(frequency=1200, duration=400)
+    winsound.Beep(frequency=1600, duration=400)
+    winsound.Beep(frequency=2000, duration=400)
+    winsound.Beep(frequency=2400, duration=400)
 
 
 def split_equally(total: int, length: int) -> List[int]:
@@ -40,38 +48,25 @@ def get_template_groups(templates: List[Path]) -> Dict[str, List[Path]]:
 def produce_synthetic_dataset(
         templates_path: Path,
         output_path: Path,
-        total_samples: int,
-        pct_special_samples: float,
+        samples_per_template: int,
         model_output_limit: int,
 ):
-    num_special_samples = int(total_samples * pct_special_samples)
-    num_common_samples = total_samples - num_special_samples
-
-    common_templates = list(templates_path.glob("common/*.docx"))
-    special_templates = list(templates_path.glob("special/*.docx"))
-
-    common_template_groups = get_template_groups(common_templates)
-    special_template_groups = get_template_groups(special_templates)
-
-    num_samples_per_common_group = split_equally(num_common_samples, len(common_template_groups))
-    num_samples_per_special_group = split_equally(num_special_samples, len(special_template_groups))
+    templates = [templates_path / group_name / template_name
+        for group_name in os.listdir(templates_path)
+        for template_name in os.listdir(templates_path / group_name)
+    ]
 
     # Produce common samples
     total_samples = 0
-    for template_group, num_samples in tqdm(zip(common_template_groups.values(), num_samples_per_common_group)):
-        for idx in range(num_samples):
-            template = random.choice(template_group)
-            total_samples += 1
-            print(total_samples, template)
-            SyntheticDataGenerator(template, output_path, model_output_limit).generate()
+    for template in templates:
+        for idx in range(samples_per_template):
+            try:
+                SyntheticDataGenerator(template, output_path, model_output_limit).generate()
+                total_samples += 1
+            except GenerationException:
+                continue
 
-    # Produce special samples
-    for template_group, num_samples in tqdm(zip(special_template_groups.values(), num_samples_per_special_group)):
-        for _ in range(num_samples):
-            template = random.choice(template_group)
-            total_samples += 1
-            print(total_samples, template)
-            SyntheticDataGenerator(template, output_path, model_output_limit).generate()
+    return total_samples
 
 
 if __name__ == '__main__':
@@ -79,16 +74,35 @@ if __name__ == '__main__':
 
     """ PARAMETERS """
     TEMPLATES_PATH = Path("templates")
-    OUTPUT_PATH = Path(f"output/{timestamp}")
-    NUM_SAMPLES = 200
+    OUTPUT_PATH_BASE = Path(f"output") / timestamp
+    BATCHES = 5
+    SAMPLES_PER_TEMPLATE = 1
     PCT_SPECIAL_SAMPLES = 0.1
-    MODEL_MAX_OUTPUT_LIMIT = 768  # Max. number of tokens to produce in the new trained model (default is 768)
+    MODEL_MAX_OUTPUT_LIMIT = 1152  # Max. number of tokens to produce in the new trained model (default is 768)
     """            """
 
-    produce_synthetic_dataset(TEMPLATES_PATH, OUTPUT_PATH, NUM_SAMPLES, PCT_SPECIAL_SAMPLES, MODEL_MAX_OUTPUT_LIMIT)
+    # Initialize output folder
+    OUTPUT_PATH_BASE.mkdir(parents=True, exist_ok=True)
 
-    # from desktop_alerts import show_desktop_alert
-    # show_desktop_alert("Generation Finished", f"Generated {NUM_SAMPLES} samples")
+    total_samples = 0
+    for batch_idx in range(BATCHES):
+        try:
+            OUTPUT_PATH = OUTPUT_PATH_BASE / str(batch_idx).zfill(2)
+            batch_samples = produce_synthetic_dataset(TEMPLATES_PATH, OUTPUT_PATH, SAMPLES_PER_TEMPLATE, MODEL_MAX_OUTPUT_LIMIT)
+            total_samples += batch_samples
+        except Exception as e:
+            print(e)
+            print(f"Something went wrong with batch '{batch_idx}'. Skipping and starting next one (if remaining).")
+
+    try:
+        print(f"OUTPUT FOLDER: {OUTPUT_PATH_BASE}")
+        print(f"ASKED SAMPLES: {total_samples}")
+        print(f"TOTAL GENERATED (counting subsamples): {len(list(OUTPUT_PATH_BASE.glob('**/*.png')))}")
+        print(f"GENERATED {total_samples} SAMPLES IN {OUTPUT_PATH_BASE}.")
+    except Exception:  # noqa
+        pass
+    finally:
+        end_alert()
 
 
 

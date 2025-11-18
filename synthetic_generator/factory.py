@@ -33,7 +33,7 @@ class GeneratorFactory:
         self._doc_sections = []
         self._existing_vals = set()
         # self._inv_fields = self._preload_invoice_fields()
-        print(self._base_config.lang)
+        # print(self._base_config.lang)
 
     def generate(self, name: str, **kwargs):
         """
@@ -61,7 +61,7 @@ class GeneratorFactory:
 
     def generate_color_palette(self):
         c1, c2, c3, c4 = self._pondered_choice(word_bank.COLOR_PALETTES)
-        print(f"Colors: {c1}, {c2}, {c3}, {c4}")
+        # print(f"Colors: {c1}, {c2}, {c3}, {c4}")
         return {
             "c1": c1,
             "c2": c2,
@@ -141,7 +141,7 @@ class GeneratorFactory:
             }
         elif type_ == "table":
             num_cols = len(data['raw']['labels'])
-            print("Num of cols in table:", num_cols)
+            # print("Num of cols in table:", num_cols)
             font_size = word_bank.TABLE_FONT_SIZES.get(num_cols)
 
             rich_content = {

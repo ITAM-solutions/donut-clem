@@ -30,6 +30,10 @@ class ModelState(str, Enum):
     PRODUCTION = "Production"
     EVALUATION = "Evaluation"
 
+"""
+This is more like a WorkBench for Donut model than a model itself.
+It uses the model and some other things to prepare the model and run inference.
+"""
 
 class DonutCLEM:
     """ Interface over Donut model implementation for easier input/output processing. """

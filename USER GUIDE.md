@@ -1,3 +1,39 @@
+# Table of contents
+1. [Fine-Tuning](#fine-tuning)
+2. [Project Structure](#project-structure)
+3. [Model Evaluation](#model-evaluation)
+4. [Under the hood](#under-the-hood)
+5. [Usage in production](#usage-in-production)
+6. [Dataset tagging Tool](#dataset-tagging-tool)
+7. [Synthetic Data Generator](#synthetic-data-generator)
+
+
+# Fine-Tuning
+
+- Requirements
+
+Talk about the mandatory requirements to make donut work. Mention python3.8. 
+Talk about this: https://github.com/clovaai/donut/issues/322#issuecomment-3178348825
+Mention other problems I can remember I had.
+
+- Setting up the environment
+
+- Vast.ai guide
+
+# Project Structure
+
+Mainly talk about:
+```shell
+config/
+dataset/
+donut/
+evaluation/
+weights/ # rename as result/
+
+
+```
+
+
 # Preparing for fine-tuning
 
 Follow this steps to make Donut work in a Vast.ai instance or any other server 

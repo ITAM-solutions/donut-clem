@@ -9,7 +9,6 @@ import os
 import shutil
 import json
 from pathlib import Path
-from tqdm import tqdm
 from typing import List
 
 def count_from_output_records():
@@ -53,7 +52,7 @@ def combine_output_records():
 
     # Iterate over records and give a normalized name using an index
     sample_idx = 0
-    for record_path in tqdm(records, total=len(records)):
+    for record_path in records:
         template_folders: List[Path] = [record_path / template_name for template_name in os.listdir(record_path)]
         for template_folder in template_folders:
             ims: List[Path] = list(template_folder.glob('*.png'))

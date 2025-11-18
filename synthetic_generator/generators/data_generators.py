@@ -260,8 +260,8 @@ def gen_tbl_products(config: DocxConfig, quantity: int, missing: int, gt_data: d
         product_data = _generate_product(config, fields_selection, gt_products, currency=gt_currency, idx=idx)
         raw_data['tb_items'].append(product_data)
 
-    print("Products:", quantity)
-    print("Empty rows:", missing)
+    # print("Products:", quantity)
+    # print("Empty rows:", missing)
     for _ in range(quantity, quantity + missing):
         empty_product = _generate_product(config, fields_selection, gt_products, empty_product=True, currency=gt_currency)
         raw_data['tb_items'].append(empty_product)
